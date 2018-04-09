@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Route {{ theRoute.routeNumber }}, Stop {{ stopNumber }}
+    </ion-title>
+    <ion-buttons end> 
+      <button *ngIf="showCompleted == false" ion-button icon-only (click)="toggle()" outline>
+	<ion-icon name="apps"></ion-icon>
+      </button>
+
+      <button *ngIf="showCompleted == true" ion-button icon-only (click)="toggle()" solid>
+	<ion-icon name="apps"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <div *ngFor="let item of theCartPosition.items; let i = index">
+  <ion-card *ngIf="item.audited == false && showCompleted == false">
+    <ion-card-header>
+	<ion-grid>
+	  <ion-row>
+	    <ion-item> 
+	      <ion-label> {{ item.itemName }}</ion-label>
+	      <ion-checkbox color="dark" checked="item.audited" (click)="itemClicked(i)"></ion-checkbox>
+	      </ion-item>
+	    </ion-row>
+	  </ion-grid>
+	</ion-card-header>
+	<ion-grid>
+	<ion-row>
+	  <ion-item *ngIf="item.quantity > 1">
+	    <ion-label>{{item.selectedQuantity}}</ion-label>
+	    <ion-range min="0" [max]="item.quantity" step="1" [(ngModel)]="item.selectedQuantity" (ionChange)="isAudited(i)">
+	      <ion-label range-left>0</ion-label>
+	      <ion-label range-right>{{item.quantity}}</ion-label>
+	    </ion-range>
+	  </ion-item>
+	</ion-row>
+	<ion-row>
+	  <ion-col>
+	    WRIN: {{ item.wrin }}
+	  </ion-col>
+	  <ion-col col-4>
+	    <button ion-button (click)="logErrors(i)">Error</button>
+	  </ion-col>
+	</ion-row>
+      </ion-grid>
+    </ion-card>
+  <ion-card *ngIf="showCompleted == true && item.audited == true">
+    <ion-card-header>
+	<ion-grid>
+	  <ion-row>
+	    <ion-item> 
+	      <ion-label> {{ item.itemName }}</ion-label>
+	      <ion-checkbox color="dark" checked="item.audited" (click)="itemClicked(i)"></ion-checkbox>
+	      </ion-item>
+	    </ion-row>
+	  </ion-grid>
+	</ion-card-header>
+	<ion-grid>
+	<ion-row>
+	  <ion-col>
+	    WRIN: {{ item.wrin }}
+	  </ion-col>
+	  <ion-col col-4>
+	    <button ion-button (click)="logErrors(i)">Error</button>
+	  </ion-col>
+	</ion-row>
+      </ion-grid>
+    </ion-card>
+  </div>
+</ion-content>
+

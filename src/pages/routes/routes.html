@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+	    Routes
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="generateEndOfShift()">EOS</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <button ion-item *ngFor="let route of selectedRoutes" (click)="routeSelected(route)">
+      {{ route.routeNumber }}
+    </button>
+  </ion-list>
+</ion-content>

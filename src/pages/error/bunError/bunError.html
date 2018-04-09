@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Bun Error
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <div *ngIf="cartPosition != null">
+	{{ cartPosition.picker }}
+      </div>
+    </ion-row>
+    <ion-row>
+      Bun Error
+    </ion-row>
+    <ion-row>
+      Route: {{this.route.routeNumber }}
+    </ion-row>
+    <ion-row>
+      Position: {{ this.cartPosition.cartPosition }}
+    </ion-row>
+  </ion-grid>
+
+  <button ion-button color="blue" outline (click)="generateError()">Confirm Error</button>
+</ion-content>

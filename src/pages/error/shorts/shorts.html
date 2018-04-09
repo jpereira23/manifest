@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Short
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      How Many Shorts?
+    </ion-row>
+    <ion-row>
+      <ion-col>
+	<button ion-fab (click)="subtract()"><ion-icon name="remove"></ion-icon></button>
+      </ion-col>
+      <ion-col>
+	<ion-input [(ngModel)]="short" type="number"></ion-input>
+      </ion-col>
+      <ion-col>
+	<button ion-fab (click)="add()"><ion-icon name="add"></ion-icon></button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <button ion-button color="blue" outline (click)="generateError()">Confirm Error</button>
+</ion-content>

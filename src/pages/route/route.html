@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Route {{ theRoute.routeNumber }}
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-end outline color="orange" *ngIf="theRoute.bunsAudited == false" (click)="buns()">
+	Buns
+	<ion-icon name="radio-button-off"></ion-icon>
+      </button>
+      <button *ngIf="theRoute.bunsAudited == true" ion-button icon-end solid color="orange" (click)="buns()">
+	Buns
+	<ion-icon name="radio-button-on"></ion-icon>
+      </button>
+    </ion-buttons>  
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding> 
+  <ion-item>
+    <ion-label>Stop</ion-label>
+    <ion-select [(ngModel)]="selectedStop">
+      <ion-option *ngFor="let stop of theRoute.statuss[0].stops" [value]="stop.stopNumber">
+	{{ stop.stopNumber }}
+      </ion-option>
+    </ion-select>
+  </ion-item>
+  
+  <ion-item-group *ngFor="let aStatus of theRoute.statuss">
+    <ion-item-divider color="light">{{ aStatus.status }} <ion-icon *ngIf="thisHotRoute(selectedStop) == true" name="flame"></ion-icon></ion-item-divider>
+    <ion-card *ngFor="let stop of aStatus.stops">
+      <div *ngIf="stop.stopNumber == selectedStop">
+      <ion-card *ngFor="let cartPosition of stop.cartPositions" >
+	<ion-card-header (click)="cartPositionPicked(cartPosition)">
+	  <ion-grid>
+	    <ion-row>
+	      <ion-col>
+		{{ cartPosition.cartPosition }}  
+	      </ion-col>
+	      <ion-col>
+		{{ aStatus.status }} 
+	      </ion-col>
+	      <ion-col *ngIf="isAudited(cartPosition) == 1">
+		<ion-icon name="eye"></ion-icon>
+	      </ion-col>
+	      <ion-col *ngIf="isAudited(cartPosition) == 0">
+		<ion-icon name="checkmark-circle"></ion-icon>
+	      </ion-col>
+	      <ion-col *ngIf="isAudited(cartPosition) == 2">
+	      </ion-col>
+	    </ion-row>
+	  </ion-grid>
+	</ion-card-header>
+	<ion-grid>
+	<ion-row>
+	  <ion-item>
+	    <ion-label fixed>Picker</ion-label> 
+	    <ion-input type="text" [(ngModel)]="cartPosition.picker"></ion-input>
+	  </ion-item>
+	</ion-row>
+      </ion-grid>
+    </ion-card>
+    </div>
+  </ion-card>
+  </ion-item-group>
+  <!--
+  <ion-card *ngFor="let cartPosition of selectedStop.cartPositions" (click)="cartPositionPicked(cartPosition)">
+    <ion-card-header>
+      <ion-grid>
+	<ion-row>
+	  <ion-col>
+	    {{ cartPosition.cartPosition }}  
+	  </ion-col>
+	  <ion-col>
+	    {{ cartPosition.items[0].type }} 
+	  </ion-col>
+	  <ion-col *ngIf="isAudited(cartPosition) == 1">
+	    <ion-icon name="eye"></ion-icon>
+	  </ion-col>
+	  <ion-col *ngIf="isAudited(cartPosition) == 0">
+	    <ion-icon name="checkmark-circle"></ion-icon>
+	  </ion-col>
+	  <ion-col *ngIf="isAudited(cartPosition) == 2">
+	  </ion-col>
+	</ion-row>
+      </ion-grid>
+    </ion-card-header>
+    <ion-grid>
+	<ion-row>
+	  <ion-item>
+	    <ion-label fixed>Picker</ion-label> 
+	    <ion-input type="text" [(ngModel)]="cartPosition.picker"></ion-input>
+	  </ion-item>
+	</ion-row>
+      </ion-grid>
+  </ion-card>
+  -->
+</ion-content>

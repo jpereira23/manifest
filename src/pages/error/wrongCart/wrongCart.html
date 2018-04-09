@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Wrong Cart
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      {{ cartPosition.picker }}
+    </ion-row>
+    <ion-row>
+      Item: {{ correct.itemName }}
+    </ion-row>
+    <ion-row>
+      Route: {{ route.routeNumber }}
+    </ion-row>
+    <ion-row>
+      <ion-item>
+	<ion-label>Wrong Cart</ion-label>
+	<ion-select [(ngModel)]="error.wrongCartPosition">
+	  <ion-option *ngFor="let cart of cartPositions" [value]="cart.cartPosition">
+	    {{ cart.cartPosition }}
+	  </ion-option>
+	</ion-select>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      Correct Cart: {{ cartPosition.cartPosition }}
+    </ion-row>
+  </ion-grid>
+
+  <button ion-button color="blue" outline (click)="generateError()">Confirm Error</button> 
+</ion-content>

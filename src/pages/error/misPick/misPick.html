@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Mis Picks
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      {{ cartPosition.picker }}
+    </ion-row>
+    <ion-row>
+      <ion-item>
+	<ion-label>Wrong Item</ion-label>
+	<ion-input type="text" [(ngModel)]="error.picked.itemName"></ion-input>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <ion-item>
+	<ion-label>Correct Item</ion-label>
+	<ion-select [(ngModel)]="error.correct">
+	  <ion-option *ngFor="let item of cartPosition.items" [value]="item">
+	    {{ item.itemName }}
+	  </ion-option>
+	</ion-select>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <button ion-button color="blue" outline (click)="generateRoutes()">Generate</button>
+    </ion-row>
+  </ion-grid>
+</ion-content>
