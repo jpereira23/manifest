@@ -48,7 +48,7 @@ export class WrongCartPage{
     this.error.cartPosition = this.cartPosition.cartPosition;
     this.error.routeNumber = this.route.routeNumber;
     this.error.cartPosition = this.cartPosition.cartPosition;
-    this.error.picker = this.cartPosition.picker;
+    this.error.picker = this.cartPosition.picker.name;
     this.endOfShift.errors.push(this.error);
     this.navCtrl.pop();
   }

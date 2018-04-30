@@ -24,7 +24,7 @@ export class CartHandlesPage {
   generateError(){
     var error = new Error();
     error.errorIndex = 0;
-    error.picker = this.cartPosition.picker;
+    error.picker = this.cartPosition.picker.name;
     error.routeNumber = this.route.routeNumber;
     error.cartPosition = this.cartPosition.cartPosition;
     this.endOfShift.errors.push(error);

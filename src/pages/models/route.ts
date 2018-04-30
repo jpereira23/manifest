@@ -1,10 +1,12 @@
 import { CartPosition } from './cartPosition';
 import { Stop } from './stop'; 
 import { Status } from './status';
+import { RouteDate } from './routeDate'; 
+import { CartRequirements } from './cartRequirements';
 
 export class Route{
   routeNumber: string;
-  date: Date;
+  date: RouteDate;
   statuss: Array<Status> = [];
   bunsAudited: boolean;
   hotStops: Array<string> = [];
@@ -12,14 +14,111 @@ export class Route{
   constructor(){
     this.routeNumber = "";
     this.statuss = [];
-    this.date = new Date();
+    this.date = new RouteDate();
     this.bunsAudited = false;
     this.hotStops = []; 
   }
 
+  getIndeces(status: string, stopNumber: string, cartPositionName: string){
+    var aCartRequirement = new CartRequirements();
+    for(var i = 0; i < this.statuss.length; i++)
+    {
+      if(this.statuss[i].status == status){
+	aCartRequirement.statusIndex = i;
+	aCartRequirement = this.statuss[i].getIndeces(stopNumber, cartPositionName, aCartRequirement);
+      }
+    }
+    return aCartRequirement;
+  } 
+
+  getItems(statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getItems(stopIndex, cartIndex);
+  }
+
+  getItemSelectedQuantity(itemIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getItemSelectedQuantity(itemIndex, stopIndex, cartIndex);
+  }
+
+  getItemQuantity(itemIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getItemQuantity(itemIndex, stopIndex, cartIndex); 
+  } 
+
+  getItemAudited(itemIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getItemAudited(itemIndex, stopIndex, cartIndex);
+  }
+
+  getItemAuditedItems(statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getItemAuditedItems(stopIndex, cartIndex); 
+  }
+
+  getItemAuditedItemsLength(statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getItemAuditedItemsLength(stopIndex, cartIndex);
+  }
+
+  itemIncrementAuditedItems(statusIndex: number, stopIndex: number, cartIndex: number){
+    this.statuss[statusIndex].itemIncrementAuditedItems(stopIndex, cartIndex);
+  }
+
+  itemDecrementAuditedItems(statusIndex: number, stopIndex: number, cartIndex: number){
+    this.statuss[statusIndex].itemDecrementAuditedItems(stopIndex, cartIndex);
+  }
+
+  modifyItemAudited(itemIndex: number, statusIndex: number, stopIndex: number, cartIndex: number, value: boolean){
+    this.statuss[statusIndex].modifyItemAudited(itemIndex, stopIndex, cartIndex, value);
+  }
+
+  modifyItemSelectedQuantity(itemIndex: number, statusIndex: number, stopIndex: number, cartIndex: number, value: number){
+    this.statuss[statusIndex].modifyItemSelectedQuantity(itemIndex, stopIndex, cartIndex, value);
+  }
+
+  modifyCartAudited(statusIndex: number, stopIndex: number, cartIndex: number, value: boolean){
+    this.statuss[statusIndex].modifyCartAudited(stopIndex, cartIndex, value);
+  }
+
+  convertStorage(anResult){
+    this.routeNumber = anResult.routeNumber;
+    this.date.day = anResult.date.day; 
+    this.date.year = anResult.date.year;
+    this.date.month = anResult.date.month;
+    this.date.hour = anResult.date.hour;
+    this.date.minute = anResult.date.minute;
+
+    var section1 = new Status();
+    section1.status = "DRY";
+    var section2 = new Status();
+    section2.status = "REF";
+    var section3 = new Status();
+    section3.status = "FRZ";
+    this.statuss.push(section1);
+    this.statuss.push(section2);
+    this.statuss.push(section3);
+    for(var i = 0; i < anResult.statuss.length; i++)
+    {
+      switch(anResult.statuss[i].status)
+      {
+	case 'DRY':
+	  this.statuss[0].convertStorage(anResult.statuss[i]);
+	  break;
+	case 'REF':
+	  this.statuss[1].convertStorage(anResult.statuss[i]);
+	  break;
+	case 'FRZ': 
+	  this.statuss[2].convertStorage(anResult.statuss[i]);
+	  break;
+	default: 
+	  console.log("DEFAULT");
+	  break;
+      }
+    }
+  }
   convertJSON(anResult){
     this.routeNumber = anResult.routeNumber;
-    this.date = new Date(anResult.date);
+    this.date.day = anResult.date.day; 
+    this.date.year = anResult.date.year; 
+    this.date.month = anResult.date.month;
+    this.date.hour = anResult.date.hour; 
+    this.date.minute = anResult.date.minute;
+
     var section1 = new Status();
     section1.status = "DRY"; 
     this.statuss.push(section1);
@@ -57,4 +156,5 @@ export class Route{
     this.statuss[1].convertJSON(refCarts);
     this.statuss[2].convertJSON(frzCarts);
   }
+
 }

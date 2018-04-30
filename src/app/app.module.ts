@@ -9,7 +9,6 @@ import { HomePage } from '../pages/home/home';
 import { RoutesPage } from '../pages/routes/routes';
 import { RoutePage } from '../pages/route/route';
 import { CartPositionPage } from '../pages/cartPosition/cartPosition';
-import { DataService } from '../pages/data.service';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { ErrorsPage } from '../pages/errors/errors';
@@ -22,6 +21,14 @@ import { OveragesPage } from '../pages/error/overages/overages';
 import { EndOfShiftPage } from '../pages/endOfShift/endOfShift'; 
 import { BunErrorPage } from '../pages/error/bunError/bunError';
 import { WrongCartPage } from '../pages/error/wrongCart/wrongCart';
+import { ReportView } from '../pages/reportView/report';
+import { PickerView } from '../pages/pickerView/picker';
+import { AddPickerPage } from '../pages/addPicker/addpicker';
+import { LoginPage } from '../pages/login/login'; 
+
+
+import { DataService } from '../pages/data.service';
+import { AuditorService } from '../pages/auditor.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +46,11 @@ import { WrongCartPage } from '../pages/error/wrongCart/wrongCart';
     OveragesPage,
     EndOfShiftPage,
     BunErrorPage,
-    WrongCartPage
+    WrongCartPage,
+    ReportView,
+    PickerView,
+    AddPickerPage, 
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -63,10 +74,15 @@ import { WrongCartPage } from '../pages/error/wrongCart/wrongCart';
     OveragesPage,
     EndOfShiftPage,
     BunErrorPage,
-    WrongCartPage
+    WrongCartPage,
+    ReportView,
+    PickerView,
+    AddPickerPage,
+    LoginPage
   ],
   providers: [
     DataService,
+    AuditorService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

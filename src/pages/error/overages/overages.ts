@@ -42,7 +42,7 @@ export class OveragesPage{
     error.overage = this.overage;
     error.routeNumber = this.route.routeNumber;
     error.cartPosition = this.cartPosition.cartPosition;
-    error.picker = this.cartPosition.picker;
+    error.picker = this.cartPosition.picker.name;
     error.itemOverage = this.correct;
     this.endOfShift.errors.push(error);
     this.navCtrl.pop();

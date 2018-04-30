@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Keyboard } from 'ionic-angular';
 import { Route } from '../models/route';
 import { CartPosition } from '../models/cartPosition';
 import { Storage } from '@ionic/storage';
@@ -8,6 +8,10 @@ import { Report } from '../models/report';
 import { ErrorsPage } from '../errors/errors';
 import { Item } from '../models/item';
 import { Stop } from '../models/stop';
+import { Status } from '../models/status';
+import { Picker } from '../models/picker';
+import { AuditorService } from '../auditor.service'; 
+import { CartRequirements } from '../models/cartRequirements';
 
 @Component({
   selector: 'page-cartPosition',
@@ -20,50 +24,40 @@ export class CartPositionPage {
   endOfShift: EndOfShift;
   backUpItems: Array<Item> = [];
   stopNumber: string;
-  theRoute: Route;
+  status: string;
+  stop: Stop;
+  routeIndex: number;
+  routeNumber: string;
   showCompleted = false;
-  constructor(private navCtrl: NavController, private navParams: NavParams, private storage: Storage){
-    this.theCartPosition = this.navParams.get('aCartPosition');
-    this.backUpItems = this.theCartPosition.items;
+  pickers: Array<Picker> = [];
+  cartRequirements: CartRequirements = new CartRequirements();
+  constructor(private navCtrl: NavController, private navParams: NavParams, private storage: Storage, private keyboard: Keyboard, private auditorService: AuditorService){
+    var cartPositionName = this.navParams.get('cartPositionName');
+    this.routeIndex = this.navParams.get('routeIndex'); 
+    this.routeNumber = this.auditorService.getRouteNumber(this.routeIndex); 
     this.endOfShift = this.navParams.get('endOfShift');
-    this.theRoute = this.navParams.get('route'); 
     this.stopNumber = this.navParams.get('stopNumber');
-    this.storage.get('cartPositions').then((val) => {
-      this.storedCartPosition = val;
-    });
-    /*
-    for(var i = 0; i < this.theRoute.statuss.length; i++)
-    {
-      for(var j = 0; j < this.theRoute.statuss[i].stops.length; j++)
-      {
-	for(var k = 0; k < this.theRoute.statuss[i].stops[j].cartPositions.length; k++)
-	{
-	  if(this.theRoute.statuss[i].stops[j].cartPositions[k].cartPosition == this.theCartPosition.cartPosition)
-	  {
-	    console.log(this.theRoute.statuss[i].stops[j].cartPositions[k]);
-	  }
-	}
-      }
-    } 
-    */
-
-
+    this.stop = this.navParams.get('stop');
+    this.status = this.navParams.get('status');
+    this.cartRequirements = this.auditorService.getIndeces(this.routeIndex, this.status, this.stopNumber, cartPositionName); 
+    this.backUpItems = this.auditorService.getItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex); 
+    this.pickers = this.navParams.get('pickers');
   }
 
   initializeItems(){
     this.theCartPosition.items = this.backUpItems;
   } 
   
+
+  /** 
+   * getItems function is used for the search bar in the cartPosition.html 
+   *
+   *
+   */
   getItems(ev: any){
     this.initializeItems();
 
     let val = ev.target.value;
-    /*
-    for(var i = 0; i < this.theCartPosition.items.length; i++)
-    { 
-      this.theCartPosition.items[i].wrin.indexOf(val));
-    }
-    */
     if(val && val.trim() != ''){
       this.theCartPosition.items = this.theCartPosition.items.filter((item) => {
 	console.log(item.wrin.indexOf(val));
@@ -71,40 +65,56 @@ export class CartPositionPage {
       }); 
     } 
   }
+
+  /** 
+   * isAudited function is used to help determine if an item with more than one quantity
+   * is fully audited or partially audited
+   *
+   */
   isAudited(i: number){
-    console.log(this.theCartPosition.items[i].selectedQuantity);
-    console.log(this.theCartPosition.items[i].quantity);
-    if(this.theCartPosition.items[i].selectedQuantity >= this.theCartPosition.items[i].quantity)
+    if(this.auditorService.getItemSelectedQuantity(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) >= this.auditorService.getItemQuantity(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex))
     {
       setTimeout(() => {
-	console.log("Hello This should work"); 
-	this.theCartPosition.items[i].audited = true;
-	this.theCartPosition.auditedItems++;
+	this.auditorService.modifyItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, true);
+	this.auditorService.itemIncrementAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
       }, 500);
     }
-    else if(this.theCartPosition.items[i].audited == true && this.theCartPosition.items[i].selectedQuantity < this.theCartPosition.items[i].quantity)
+    else if(this.auditorService.getItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) == true && this.auditorService.getItemSelectedQuantity(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) < this.auditorService.getItemQuantity(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex))
     {
-      this.theCartPosition.items[i].audited = false;
-      this.theCartPosition.auditedItems--;
+	this.auditorService.modifyItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, false);
+	this.auditorService.itemDecrementAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
     }
   }
 
   ionViewWillLeave(){
-    if(this.theCartPosition.auditedItems == this.theCartPosition.items.length)
+    this.auditorService.saveAudited();  
+    if(this.auditorService.getItemAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) == this.auditorService.getItemAuditedItemsLength(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex))
     {
-      this.storage.set(this.theRoute.routeNumber, this.theRoute);
+      this.auditorService.modifyCartAudited(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, true);
+    }
+    else 
+    {
+      this.auditorService.modifyCartAudited(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, false);
     }
   }   
 
+  /**
+   *
+   * logErrors function is used to navigate to the error page 
+   *
+   */
   logErrors(i: number){
     this.navCtrl.push(ErrorsPage, {
       endOfShift: this.endOfShift,
       cartPosition: this.theCartPosition,
-      route: this.theRoute,
       correct: this.theCartPosition.items[i]
     });
   }
 
+  /**
+   * toggle function is navigate between viewing checked off items and non-checked off items 
+   *
+   */
   toggle(){
     if(this.showCompleted == false){
       this.showCompleted = true;
@@ -113,19 +123,23 @@ export class CartPositionPage {
       this.showCompleted = false;
     }
   } 
+
+  /**
+   *
+   *  itemClicked function is used to physically switch on or off if an item is audited.
+   *
+   */
   itemClicked(i: number){
     setTimeout(() =>{  
-	if(this.theCartPosition.items[i].audited == true){
-	  console.log("is true"); 
-	  this.theCartPosition.items[i].audited = false;
-	  this.theCartPosition.auditedItems--;
-	  this.theCartPosition.items[i].selectedQuantity = 0;
+	if(this.auditorService.getItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) == false){
+	  this.auditorService.modifyItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, true);
+	  this.auditorService.itemIncrementAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+	  this.auditorService.modifyItemSelectedQuantity(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, 0);
 	}
-	else if(this.theCartPosition.items[i].audited == false){
-	  this.theCartPosition.items[i].audited = true;
-	  this.theCartPosition.auditedItems++;
+	else if(this.auditorService.getItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) == true){
+	  this.auditorService.modifyItemAudited(this.routeIndex, i, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, false);
+	  this.auditorService.itemDecrementAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
 	}
-	console.log(this.theCartPosition.auditedItems + " == " + this.theCartPosition.items.length);
       }, 500);
    }
   
@@ -133,4 +147,7 @@ export class CartPositionPage {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  hideDaKeyboard(){
+    this.keyboard.close();    
+  }
 }

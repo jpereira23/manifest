@@ -1,0 +1,42 @@
+<div>
+  <div *ngFor="let aRoute of auditedRoutes">
+      <div *ngIf="aRoute.bunsAudited == true">
+	{{ aRoute.routeNumber }}'s buns are audited
+      </div>
+    <div *ngFor="let status of aRoute.statuss">
+      {{ aRoute.routeNumber }} ({{status.status}})
+      <ul>
+	<li><span *ngFor="let stop of status.stops"><span *ngIf="allStopsComplete(stop)">{{stop.stopNumber}},</span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngFor="let error of errors">
+      {{ error }}:
+    <div *ngIf="endOfShift!=null">
+    <div *ngFor="let anError of endOfShift.errors">
+      <ul>
+	<li *ngIf="anError.typeOfError[anError.errorIndex] == error">
+	  <div *ngIf="anError.errorIndex == 0 || anError.errorIndex == 1 || anError.errorIndex == 3 || anError.errorIndex == 4">
+	    {{anError.picker}}, Route {{anError.routeNumber}}, Cart {{ anError.cartPosition }} 
+	  </div>
+	  <div *ngIf="anError.errorIndex == 2">
+	    {{anError.picker}}, mis-picked a {{anError.correct.itemName}} for a {{anError.picked.itemName}} on route {{anError.routeNumber}}, cart {{anError.cartPosition}}
+	  </div>
+	  <div *ngIf="anError.errorIndex == 5">
+	    {{anError.picker}} was short {{ anError.short }} {{anError.itemShort.itemName}}'s on route {{ anError.routeNumber }}, cart {{ anError.cartPosition }}
+	  </div>
+	  <div *ngIf="anError.errorIndex == 6">
+	    {{anError.picker}} picked item {{ anError.item }} on cart {{anError.wrongCartPosition}} instead of cart {{anError.cartPosition}}
+	  </div>
+	  <div *ngIf="anError.errorIndex == 7">
+	    {{anError.picker}} was over {{ anError.overage }} {{anError.itemOverage.itemName}}'s on route {{ anError.routeNumber }}, cart {{ anError.cartPosition }}
+	  </div>
+
+	</li>
+      </ul>
+    </div>
+    </div>
+  </div>
+  <button ion-button color="blue" outline (click)="startNewShift()">Clear Shift</button>
+</div>

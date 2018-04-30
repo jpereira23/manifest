@@ -29,7 +29,7 @@ export class MisPickPage {
 
   generateRoutes(){
     this.error.errorIndex = 2;
-    this.error.picker = this.cartPosition.picker
+    this.error.picker = this.cartPosition.picker.name
     this.error.routeNumber = this.route.routeNumber;
     this.error.cartPosition = this.cartPosition.cartPosition;
     this.endOfShift.errors.push(this.error);

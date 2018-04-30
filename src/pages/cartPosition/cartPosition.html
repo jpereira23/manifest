@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Route {{ theRoute.routeNumber }}, Stop {{ stopNumber }}
+      Route {{ routeNumber }}, Stop {{ stopNumber }}
     </ion-title>
     <ion-buttons end> 
       <button *ngIf="showCompleted == false" ion-button icon-only (click)="toggle()" outline>
@@ -12,12 +12,13 @@
 	<ion-icon name="apps"></ion-icon>
       </button>
     </ion-buttons>
+    
   </ion-navbar>
+  <ion-searchbar (ionInput)="getItems($event)" (ionClear)="hideDaKeyboard()"></ion-searchbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-  <div *ngFor="let item of theCartPosition.items; let i = index">
+  <div *ngFor="let item of auditorService.getItems(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex); let i = index">
   <ion-card *ngIf="item.audited == false && showCompleted == false">
     <ion-card-header>
 	<ion-grid>

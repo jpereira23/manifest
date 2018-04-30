@@ -5,6 +5,7 @@ import { RoutePage } from '../route/route';
 import { EndOfShift } from '../models/endOfShift';
 import { Item } from '../models/item';
 import { EndOfShiftPage } from '../endOfShift/endOfShift';
+import { AuditorService } from '../auditor.service';
  
 
 @Component({ 
@@ -17,25 +18,22 @@ export class RoutesPage {
   endOfShift: EndOfShift;
   routes: Array<Route> = [];
 
-  constructor(private navParams: NavParams, private navCtrl: NavController){
-    this.selectedRoutes = this.navParams.get('selectedRoutes');
+  constructor(private navParams: NavParams, private navCtrl: NavController, private auditorService: AuditorService){
+    this.selectedRoutes = this.auditorService.getRoutes(); 
     this.endOfShift = this.navParams.get('endOfShift');
-    this.selectedRoutes.sort(function(a, b){
-	  var select = +new Date(b.date);
-	  return +new Date(a.date) - select;
-	}); 
   }
 
   ionicViewWillEnter(){
-    this.selectedRoutes.sort(function(a, b){
-	  var select = +new Date(b.date);
-	  return +new Date(a.date) - select;
-	});   }
+    
+  }
+
+  ionViewWillLeave(){
+    this.auditorService.saveAudited();  
+  }
 
   routeSelected(route: Route){
-    console.log(route); 
     this.navCtrl.push(RoutePage, { 
-      aRoute: route, 
+      routeNumber: route.routeNumber, 
       endOfShift: this.endOfShift
     });
   }

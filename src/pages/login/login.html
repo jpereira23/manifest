@@ -1,0 +1,19 @@
+<ion-header> 
+  <ion-navbar>
+    <ion-title>
+      Identify Yourself
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding> 
+  <ion-item> 
+    <ion-label>First Name</ion-label>
+    <ion-input placeholder="Ray" [(ngModel)]="auditor.firstName"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Last Name</ion-label>
+    <ion-input placeholder="Kroc" [(ngModel)]="auditor.lastName"></ion-input>
+  </ion-item>
+  <button ion-button outline (click)="submit()">Proceed</button>
+</ion-content>

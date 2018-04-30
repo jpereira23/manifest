@@ -7,7 +7,8 @@ import { Item } from './models/item';
 
 @Injectable()
 export class DataService {
-  url: string = "http://172.124.232.210:443/api/";
+  //url: string = "http://172.124.232.210:443/api/";
+  url: string = "http://localhost:3000/api/";
   headers = new Headers();
   result: any;
   constructor(private _http: Http){
@@ -15,52 +16,34 @@ export class DataService {
   }
 
   getManifests(){
-    return this._http.get(this.url + 'obtainManifest').map(result => this.result = this.manifestConvert(result.json().data));
-  }
-  /*
-  getItems(routes: Array<Route>)
-  {
-    var theItems: Array<Item> = [];
-    for(var i = 0; i < routes.length; i++)
-    {
-      for(var j = 0; j < routes[i].statuss.length; j++)
-      {
-	for(var k = 0; k < routes[i].statuss[j].stops.length; k++)
-	{
-	for(var l = 0; l < routes[i].statuss[j].stops[k].cartPositions.length; l++){
 
-	  var isIt = false;
-	  for(var l = 0; l < theItems.length; l++)
-	  {
-	    if(routes[i].cartPositions[j].items[k].itemName == theItems[l].itemName)
-	    {
-	      var isIt = true;
-	      break;
-	    }
-	  }
-	  if(isIt == false) 
-	  {
-	    theItems.push(routes[i].cartPositions[j].items[k]);
-	  }
-	  isIt = false;
-	}
-      }
-    } 
-    return theItems;
-  }
+  return this._http.get(this.url + 'obtainManifest').map(res => { return res.json().data });
+    /*
+    return this._http.get(this.url + 'obtainManifest').map(res => {
+      console.log(res.json().data);
+      return this.manifestConvert(res.json().data);
+    });
     */
-  manifestConvert(aResult: Array<any>)
+  }
+  
+  manifestConvert(aResult: any)
   {
     var routes: Array<Route> = [];
     for(var i = 0; i < aResult.length; i++)
     {
       var aRoute = new Route();
       aRoute.convertJSON(aResult[i]);
-      console.log(aRoute); 
       routes.push(aRoute);
     }
+    console.log(routes); 
+    return routes; 
+  }
 
-    
-    return routes;
+  removeAll()
+  {
+    var request = {
+      stuff: ""
+    };
+    return this._http.post(this.url + 'removeAll', JSON.stringify(request), { headers: this.headers}).map(res => res.json());
   }
 }

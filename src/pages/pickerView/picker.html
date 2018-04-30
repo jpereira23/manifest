@@ -1,0 +1,8 @@
+<div>
+  <ion-list *ngFor="let picker of pickers">
+    <ion-list-header>{{ picker.name }}</ion-list-header>
+	<div *ngFor="let route of picker.routes">
+	    {{ route.routeNumber }}
+	</div>
+  </ion-list>
+</div>

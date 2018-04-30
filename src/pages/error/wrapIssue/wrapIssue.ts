@@ -25,7 +25,7 @@ export class WrapIssuePage {
   generateError(){
     var error = new Error();
     error.errorIndex = 3;
-    error.picker = this.cartPosition.picker;
+    error.picker = this.cartPosition.picker.name;
     error.routeNumber = this.route.routeNumber;
     error.cartPosition = this.cartPosition.cartPosition;
     this.endOfShift.errors.push(error);

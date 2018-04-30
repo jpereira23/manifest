@@ -5,30 +5,6 @@ import { Stop } from '../models/stop';
 import { EndOfShift } from '../models/endOfShift';
 import { Storage } from '@ionic/storage';
 
-class RoutePicker{
-  pickers: Array<string>;
-  routeNumber: string;
-
-  constructor(){
-    this.pickers = [];
-    this.routeNumber = "";
-  } 
-
-  isPicker(picker: string)
-  {
-    for(var i = 0; i < this.pickers.length; i++)
-    {
-      if(this.pickers[i] == picker)
-      {
-	return true;
-      }
-    } 
-    return false;
-  }
-};
-
-
-
 @Component({
   selector: 'page-endofshift',
   templateUrl: 'endOfShift.html'
@@ -38,9 +14,8 @@ export class EndOfShiftPage{
   
   routes: Array<Route> = [];
   endOfShift: EndOfShift;
-  eos: string = "report";
+  eos: number = 1;
   errors: Array<string> = ["Missing Cart Handle", "Damage Cart Handle", "Mis-Picks", "Wrap Issue", "Bun Error", "Shorts", "Wrong Cart", "Overages"];
-    pickers: Array<RoutePicker> = [];
   auditedRoutes: Array<Route> = [];
   constructor(private navParams: NavParams, private storage: Storage, private navCtrl: NavController){
     this.routes = this.navParams.get('routes');
@@ -65,21 +40,19 @@ export class EndOfShiftPage{
 
 	if(i == counter)
 	{
-	  this.organizePickers();
+	//this.organizePickers();
 	}
       }); 
 
     }
-
-   
-
   }
 
 
   ionViewWillLeave(){
-    this.pickers = [];
+  //this.pickers = [];
   }
 
+  /*
   organizePickers(){
     for(var i = 0; i < this.auditedRoutes.length; i++)
     {
@@ -107,17 +80,8 @@ export class EndOfShiftPage{
 
     console.log(this.pickers.length);
   }
-  startNewShift(){
-    this.storage.set('endOfShift', null);
-    for(var i = 0; i < this.auditedRoutes.length; i++)
-    {	
-      this.storage.set(this.auditedRoutes[i].routeNumber, null);
-    } 
-
-    this.navCtrl.pop();
-  } 
-
-  allStopsComplete(stop: Stop){
+  */
+    allStopsComplete(stop: Stop){
     for(var i = 0; i < stop.cartPositions.length; i++)
     {
       if(stop.cartPositions[i].items.length != stop.cartPositions[i].auditedItems)

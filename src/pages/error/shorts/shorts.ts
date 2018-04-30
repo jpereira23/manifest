@@ -43,7 +43,7 @@ export class ShortsPage{
     error.itemShort = this.correct;
     error.routeNumber = this.route.routeNumber;
     error.cartPosition = this.cartPosition.cartPosition;
-    error.picker = this.cartPosition.picker;
+    error.picker = this.cartPosition.picker.name;
     error.short = this.short;
     this.endOfShift.errors.push(error);
     this.navCtrl.pop();
