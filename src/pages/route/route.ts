@@ -50,20 +50,6 @@ export class RoutePage {
   }
   
   ionViewWillEnter(){
-    /*
-    this.storage.get('pickers').then((val) => {
-      this.pickers = [];
-      if(val != null)
-      {
-	for(var i = 0; i < val.length; i++){
-	//var aPicker = new Picker();
-	  //aPicker.convertJSON(val[i]);
-	  this.pickers.push(val[i]);
-	}
-	console.log("ENTERED: " + this.pickers);
-      }
-    });
-    */
   }
   ionViewWillLeave(){
     //this.storage.set('pickers', this.pickers);

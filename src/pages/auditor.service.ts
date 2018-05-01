@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'; 
 import { Auditor } from './models/auditor';
 import { Route } from './models/route';
 import { Storage } from '@ionic/storage';
@@ -11,47 +11,62 @@ export class AuditorService {
   auditor: Auditor = new Auditor();
   isLoaded = new Subject<boolean>();
   isAuditor = new Subject<boolean>();
+  isRoutes = new Subject<boolean>();
   
   constructor(private storage: Storage){
-    this.storage.ready().then(() => { 
-      this.storage.get('auditor').then((val) => {
-	if(val != null){
-	  console.log("HELL FUCKING OOOOO");
-	  console.log(val);
-	  this.auditor = val;
-	  this.auditor.routes = [];
-	  this.isAuditor.next(true);
-	  for(var i = 0; i < val.routes.length; i++)
-	  {
-	    var aRoute = new Route();
-	    aRoute.convertStorage(val.routes[i]);
-	    this.auditor.routes.push(aRoute);
-	  }	
-
-	}
-	else{
-	  this.isAuditor.next(false);
-	}     
-      }); 
-    }); 
-  }
-
-  setAuditor(routes: Array<Route>){
-    this.storage.ready().then(() => { 
-      this.storage.get('auditor').then((val) => {
-	  console.log(val);
-	  if(val != null)
-	  {
-	    this.auditor = val;	
-	  }
-	  else
-	  {
-	    this.auditor.routes = routes;
-	  }
-      }); 
+    this.storage.get('firstName').then((val) => {
+      if(val == null){
+	this.isAuditor.next(false);
+      }else{
+	this.auditor = new Auditor();
+	this.auditor.firstName = val;
+	this.storage.get('lastName').then((vals) => {
+	  this.auditor.lastName = vals;
+	});
+      }
     });
   }
 
+  setAuditor(auditor: Auditor){
+    this.storage.ready().then(() => {
+      this.storage.set('firstName', auditor.firstName);
+    });
+
+    this.storage.ready().then(() => {
+      this.storage.set('lastName', auditor.lastName);
+    });
+  }
+
+  initializeRoutes(routes: Array<Route>){
+    this.auditor.routes = [];
+    for(var i = 0; i < routes.length; i++)
+    {
+      var theRoute = new Route();
+      theRoute.convertStorage(routes[i]);
+      this.auditor.routes.push(theRoute);
+      console.log(theRoute.routeNumber);
+      this.storage.get(theRoute.routeNumber).then((val) => {
+	  if(val != null)
+	  {
+	    var aRoute = new Route();
+	    aRoute.convertStorage(val);
+	    console.log(aRoute);
+	    this.swapRoute(aRoute);
+	  }
+      });
+    }
+  }
+
+  swapRoute(route: Route){
+    for(var i = 0; i < this.auditor.routes.length; i++)
+    {
+      if(this.auditor.routes[i].routeNumber == route.routeNumber){
+	this.auditor.routes[i] = route;
+	console.log(this.auditor.routes[i]);
+	console.log(route);
+      }
+    }
+  } 
   getRouteIndex(routeNumber:string){
     for(var i = 0; i < this.auditor.routes.length; i++)
     {
@@ -138,28 +153,13 @@ export class AuditorService {
     return this.auditor.routes[routeIndex].getItemAuditedItemsLength(statusIndex, stopIndex, cartIndex);
   }
 
-  saveAudited(){
-    /*
-    this.storage.ready().then(() => {
-      this.storage.remove('auditor');
-    });
-    */
-    
-    this.storage.ready().then(() => {
-      this.storage.set('auditor', this.auditor);
-    });
+  saveAudited(routeIndex: number){
 
+   
     this.storage.ready().then(() => {
-      console.log("FINISHED SAVING");
-      console.log(this.auditor);
+      console.log(this.auditor.routes[routeIndex].routeNumber);
+      this.storage.set(this.auditor.routes[routeIndex].routeNumber, this.auditor.routes[routeIndex]);
     });
-    /*
-    this.storage.ready().then(() => {
-      this.storage.get('auditor').then((val) => {
-	console.log(val);
-      });
-    });
-    */
   }
   
   

@@ -87,14 +87,15 @@ export class CartPositionPage {
   }
 
   ionViewWillLeave(){
-    this.auditorService.saveAudited();  
     if(this.auditorService.getItemAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) == this.auditorService.getItemAuditedItemsLength(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex))
     {
       this.auditorService.modifyCartAudited(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, true);
+      this.auditorService.saveAudited(this.routeIndex);  
     }
     else 
     {
       this.auditorService.modifyCartAudited(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, false);
+      this.auditorService.saveAudited(this.routeIndex);  
     }
   }   
 

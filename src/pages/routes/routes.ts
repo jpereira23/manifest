@@ -28,7 +28,6 @@ export class RoutesPage {
   }
 
   ionViewWillLeave(){
-    this.auditorService.saveAudited();  
   }
 
   routeSelected(route: Route){

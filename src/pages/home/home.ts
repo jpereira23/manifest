@@ -5,11 +5,11 @@ import { Route } from '../models/route';
 import { RoutesPage } from '../routes/routes';
 import { EndOfShift } from '../models/endOfShift';
 import { Item } from '../models/item';
-import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
 import { AuditorService } from '../auditor.service';
 import { Auditor } from '../models/auditor';
 import { RouteDate } from '../models/routeDate';
+import { Storage  } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -24,28 +24,27 @@ export class HomePage {
   selectedRoutes: Array<Route> = [];
   auditor: Auditor = new Auditor();
   
-  constructor(public navCtrl: NavController, private dataService: DataService, private storage: Storage, private modalCtrl: ModalController, private auditorService: AuditorService) 
+  constructor(public navCtrl: NavController, private dataService: DataService, private modalCtrl: ModalController, private auditorService: AuditorService, private storage: Storage) 
   {
     this.endOfShift = new EndOfShift();
-    this.auditorService.isAuditor.subscribe(value => {
-      if(value == false){
-	this.modal = this.modalCtrl.create(LoginPage);
-	this.modal.present();
-	this.modal.onDidDismiss((data) => {
-	  if(data != null){	
-	    this.auditor = data;
-	    console.log("WTF");
-	    this.storage.set('auditor', this.auditor);
-	  }
-	});
+    this.auditorService.isAuditor.subscribe(val => {
+      if(val == false)
+      {
+	  this.modal = this.modalCtrl.create(LoginPage);
+	  this.modal.present();
+	  this.modal.onDidDismiss((data) => {
+	    if(data != null){	
+	      this.auditor = data;
+	      console.log("WTF");
+	      this.auditorService.setAuditor(this.auditor);
+	    }
+       });
       }
     });
-    
     
   }
 
   ionViewWillEnter(){
-    //this.auditorService.saveAudited();
   }
 
   delegateForManifests(manifests)
@@ -63,8 +62,8 @@ export class HomePage {
       }); 
     }
     */
-    console.log(this.selectedRoutes);
-    this.auditorService.misMatch(this.selectedRoutes);
+    console.log("FUCK");
+    this.auditorService.initializeRoutes(this.selectedRoutes);
     //this.auditorService.setAuditor(this.selectedRoutes);
 
     this.navCtrl.push(RoutesPage, {

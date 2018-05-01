@@ -17,6 +17,9 @@ export class CartPosition{
   }
 
   convertStorage(aCartPosition: CartPosition){
+    this.cartPosition = aCartPosition.cartPosition
+    this.audited = aCartPosition.audited;
+    this.auditedItems = aCartPosition.auditedItems;
     for(var i = 0; i < aCartPosition.items.length; i++)
     {
       var aItem = new Item();
