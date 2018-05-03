@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core'; 
 import { Auditor } from './models/auditor';
 import { Route } from './models/route';
+import { Picker } from './models/picker';
 import { Storage } from '@ionic/storage';
 import { Subject } from 'rxjs/Rx';
+import { Error } from './models/error';
 
 
 
@@ -23,8 +25,22 @@ export class AuditorService {
 	this.storage.get('lastName').then((vals) => {
 	  this.auditor.lastName = vals;
 	});
+	this.storage.get('errors').then((er) => {
+	  if(er != null){
+	    this.auditor.errors = er;
+	  }
+	  else{
+	    this.auditor.errors = [];
+	  }
+	});
+	this.isAuditor.next(true);
       }
     });
+  }
+
+  addError(error: Error){
+    this.auditor.errors.push(error);
+    this.storage.set('errors', this.auditor.errors);
   }
 
   setAuditor(auditor: Auditor){
@@ -37,6 +53,26 @@ export class AuditorService {
     });
   }
 
+  getPicker(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.auditor.routes[routeIndex].getPicker(statusIndex, stopIndex, cartIndex);
+  }
+  
+  getErrors(){
+    return this.auditor.errors;
+  }
+  
+  isRouteAudited(routeIndex: number){
+    return this.auditor.routes[routeIndex].isRouteAudited();
+  }
+
+  isAudited(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.auditor.routes[routeIndex].isAudited(statusIndex, stopIndex, cartIndex);
+  }
+
+  getPickers(){
+    return this.auditor.pickers; 
+  }
+
   initializeRoutes(routes: Array<Route>){
     this.auditor.routes = [];
     for(var i = 0; i < routes.length; i++)
@@ -44,17 +80,36 @@ export class AuditorService {
       var theRoute = new Route();
       theRoute.convertStorage(routes[i]);
       this.auditor.routes.push(theRoute);
-      console.log(theRoute.routeNumber);
       this.storage.get(theRoute.routeNumber).then((val) => {
 	  if(val != null)
 	  {
+	    console.log(val);
 	    var aRoute = new Route();
 	    aRoute.convertStorage(val);
-	    console.log(aRoute);
 	    this.swapRoute(aRoute);
+	    this.initiateAuditedRoutes();
 	  }
       });
     }
+  }
+
+  initiateAuditedRoutes(){
+    for(var i = 0; i < this.auditor.routes.length; i++){
+      if(this.isRouteAudited(i) == true){
+	console.log("SHOULD BE BEFORE"); 
+	this.auditor.auditedRoutes.push(this.auditor.routes[i]);
+      }
+    }
+  }
+
+  setPickers(pickers: Array<Picker>){
+    this.auditor.pickers = [];
+    this.auditor.pickers = pickers;
+  }
+
+  addPicker(picker: Picker){
+    this.auditor.pickers.push(picker);
+    this.storage.set('pickers', this.auditor.pickers);
   }
 
   swapRoute(route: Route){
@@ -62,11 +117,21 @@ export class AuditorService {
     {
       if(this.auditor.routes[i].routeNumber == route.routeNumber){
 	this.auditor.routes[i] = route;
-	console.log(this.auditor.routes[i]);
-	console.log(route);
       }
     }
   } 
+
+  addAuditedRoute(routeIndex: number){
+    if(this.auditor.auditedRouteExists(this.auditor.routes[routeIndex]) == false){
+      this.auditor.auditedRoutes.push(this.auditor.routes[routeIndex]);
+    }
+  }
+
+  getAuditedRoutes(){
+    console.log("SHOULD BE AFTER");
+    return this.auditor.auditedRoutes;
+  }
+
   getRouteIndex(routeNumber:string){
     for(var i = 0; i < this.auditor.routes.length; i++)
     {
@@ -82,7 +147,6 @@ export class AuditorService {
   }
 
   misMatch(routes: Array<Route>){
-    console.log("mismatching");
     var isIt = false;
     for(var i = 0; i < routes.length; i++){
       for(var j = 0; j < this.auditor.routes.length; j++){
@@ -125,6 +189,10 @@ export class AuditorService {
     return this.auditor.routes[routeIndex].getItemAudited(itemIndex, statusIndex, stopIndex, cartIndex);
   }
 
+  getCartPosition(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex){
+    return this.auditor.routes[routeIndex].getCartPosition(statusIndex, stopIndex, cartIndex);
+  }
+
   itemIncrementAuditedItems(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
     this.auditor.routes[routeIndex].itemIncrementAuditedItems(statusIndex, stopIndex, cartIndex);
   }
@@ -154,10 +222,7 @@ export class AuditorService {
   }
 
   saveAudited(routeIndex: number){
-
-   
     this.storage.ready().then(() => {
-      console.log(this.auditor.routes[routeIndex].routeNumber);
       this.storage.set(this.auditor.routes[routeIndex].routeNumber, this.auditor.routes[routeIndex]);
     });
   }

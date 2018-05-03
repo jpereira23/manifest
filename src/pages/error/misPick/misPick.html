@@ -9,7 +9,7 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      {{ cartPosition.picker }}
+      {{ auditorService.getCartPosition(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex) }}
     </ion-row>
     <ion-row>
       <ion-item>
@@ -21,7 +21,7 @@
       <ion-item>
 	<ion-label>Correct Item</ion-label>
 	<ion-select [(ngModel)]="error.correct">
-	  <ion-option *ngFor="let item of cartPosition.items" [value]="item">
+	  <ion-option *ngFor="let item of auditorService.getItems(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex)" [value]="item">
 	    {{ item.itemName }}
 	  </ion-option>
 	</ion-select>

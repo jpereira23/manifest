@@ -31,6 +31,28 @@ export class Route{
     return aCartRequirement;
   } 
 
+  isRouteAudited(){
+  console.log("1");
+    for(var i = 0; i < this.statuss.length; i++){
+      if(this.statuss[i].isRouteAudited() == true){
+	return true;
+      }
+    } 
+    return false;
+  }
+
+  isAudited(statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].isAudited(stopIndex, cartIndex);
+  }
+
+  getPicker(statusIndex: number, stopIndex: number, cartIndex: number){
+    return this.statuss[statusIndex].getPicker(stopIndex, cartIndex);
+  }
+
+  getCartPosition(statusIndex: number, stopIndex, cartIndex: number){
+    return this.statuss[statusIndex].getCartPosition(stopIndex, cartIndex);
+  }
+
   getItems(statusIndex: number, stopIndex: number, cartIndex: number){
     return this.statuss[statusIndex].getItems(stopIndex, cartIndex);
   }

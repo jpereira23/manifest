@@ -35,6 +35,29 @@ export class Status{
       }
     }
   }
+
+  isRouteAudited(){
+  console.log("2");
+    for(var i = 0; i < this.stops.length; i++){
+      if(this.stops[i].isRouteAudited() == true)
+      {
+	return true;
+      }
+    }
+    return false;
+  }
+
+  isAudited(stopIndex: number, cartIndex: number){
+    return this.stops[stopIndex].isAudited(cartIndex);
+  }
+
+  getCartPosition(stopIndex: number, cartIndex: number){
+    return this.stops[stopIndex].getCartPosition(cartIndex);
+  }   
+
+  getPicker(stopIndex: number, cartIndex: number){
+    return this.stops[stopIndex].getPicker(cartIndex);
+  }
   
   getItems(stopIndex: number, cartIndex: number){
     return this.stops[stopIndex].getItems(cartIndex);

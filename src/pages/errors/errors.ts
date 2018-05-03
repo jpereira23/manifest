@@ -12,6 +12,7 @@ import { OveragesPage } from '../error/overages/overages';
 import { WrongCartPage } from '../error/wrongCart/wrongCart';
 import { Item } from '../models/item';
 import { Route } from '../models/route';
+import { CartRequirements } from '../models/cartRequirements';
 
 @Component({
   selector: 'page-errors',
@@ -19,16 +20,13 @@ import { Route } from '../models/route';
   })
 
 export class ErrorsPage{
-  endOfShift: EndOfShift;
-  cartPosition: CartPosition;
-  route: Route;
   errors: Array<string> = ["Missing Cart Handle", "Damaged Cart Wheels", "Mis-Picks", "Wrap Issues", "Bun Errors", "Shorts", "Wrong Cart", "Overages"];
   correct: Item = new Item();
-  
+  routeIndex: number;
+  cartRequirements: CartRequirements;
   constructor(private navParams: NavParams, private navCtrl: NavController){
-    this.endOfShift = this.navParams.get('endOfShift'); 
-    this.cartPosition = this.navParams.get('cartPosition'); 
-    this.route = this.navParams.get('route');
+    this.routeIndex = this.navParams.get('routeIndex');
+    this.cartRequirements = this.navParams.get('cartRequirements');
     this.correct = this.navParams.get('correct');
   }
 
@@ -38,61 +36,53 @@ export class ErrorsPage{
     {
       case 0: 
 	this.navCtrl.push(CartHandlesPage,{
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements,
 	});
 	break;
       case 1: 
 	this.navCtrl.push(DamagedCartHandles,{
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements
 	});
 	break;
       case 2: 
 	this.navCtrl.push(MisPickPage, {
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route,
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements,
 	  correct: this.correct
 	});
 	break;
       case 3: 
 	this.navCtrl.push(WrapIssuePage, {
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements
 	});
 	break;
       case 4:
 	this.navCtrl.push(BunErrorPage, {
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements
 	});
 	break;
       case 5: 
 	this.navCtrl.push(ShortsPage, {
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route,
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements,
 	  correct: this.correct
 	});
 	break;
       case 6:
       this.navCtrl.push(WrongCartPage, {
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route,
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements,
 	  correct: this.correct
 	});
 	break;
       case 7:
 	this.navCtrl.push(OveragesPage, {
-	  cartPosition: this.cartPosition,
-	  endOfShift: this.endOfShift,
-	  route: this.route,
+	  routeIndex: this.routeIndex,
+	  cartRequirements: this.cartRequirements,
 	  correct: this.correct
 	});
 	break;  

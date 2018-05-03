@@ -1,8 +1,26 @@
 <div>
-  <ion-list *ngFor="let picker of pickers">
-    <ion-list-header>{{ picker.name }}</ion-list-header>
-	<div *ngFor="let route of picker.routes">
-	    {{ route.routeNumber }}
+  <ion-item-group *ngFor="let route of routes; let i = index">
+    <div *ngIf="auditorService.isRouteAudited(i) == true">
+    <ion-item-divider>{{route.routeNumber}}</ion-item-divider>
+    <div *ngFor="let status of route.statuss">
+      <ion-list-header>
+	{{status.status}}
+      </ion-list-header>
+      <div *ngFor="let stop of status.stops">
+	<div *ngFor="let cartPosition of stop.cartPositions">
+	  <div *ngIf="cartPosition.audited == true">
+	  <ion-item>
+	    <ion-card>
+	      <ion-card-header>{{cartPosition.picker.name}}</ion-card-header>
+	      <ion-card-content>
+		{{cartPosition.cartPosition}}
+	      </ion-card-content>
+	    </ion-card>
+	  </ion-item>
+	  </div>
 	</div>
-  </ion-list>
+      </div>
+    </div>
+    </div>
+  </ion-item-group>
 </div>

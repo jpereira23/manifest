@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Confirm {{ error.typeOfError[error.errorIndex] }} 
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item *ngIf="error != null" text-wrap>
+    <ion-textarea style="white-space:normal;height:100px" [(ngModel)]="this.error.message"></ion-textarea>
+  </ion-item>
+
+  <button ion-button color="blue" outline (click)="submit()">Confirm</button>
+</ion-content>

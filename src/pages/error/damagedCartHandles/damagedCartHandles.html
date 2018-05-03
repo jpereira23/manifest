@@ -9,18 +9,16 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <div *ngIf="cartPosition != null">
-	{{ cartPosition.picker }}
-      </div>
+	{{ auditorService.getPicker(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex) }}
     </ion-row>
     <ion-row>
       Damaged Cart Wheels
     </ion-row>
     <ion-row>
-      Route {{ this.cartPosition.routeNumber }}
+      Route {{ auditorService.getRouteNumber(routeIndex) }}
     </ion-row>
     <ion-row>
-      Position: {{ this.cartPosition.cartPosition }}
+      Position: {{ auditorService.getCartPosition(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex) }}
     </ion-row>
   </ion-grid>
 

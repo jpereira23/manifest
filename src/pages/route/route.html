@@ -56,7 +56,7 @@
 	  <ion-item>
 	    <ion-label fixed>Picker</ion-label> 
 	    <ion-select [(ngModel)]="cartPosition.picker">
-	      <ion-option *ngFor="let picker of pickers" [value]="picker">
+	      <ion-option *ngFor="let picker of auditorService.getPickers()" [value]="picker">
 		{{ picker.name }}
 	      </ion-option>
 	    </ion-select>

@@ -12,6 +12,7 @@ export class Error {
   routeNumber: string;
   cartPosition: string;
   picker: string;
+  message: string;
   constructor(){
     this.typeOfError = ["Missing Cart Handle", "Damage Cart Handle", "Mis-Picks", "Wrap Issue", "Bun Error", "Shorts", "Wrong Cart", "Overages"];
     this.errorIndex = 0;
@@ -25,5 +26,42 @@ export class Error {
     this.routeNumber = "";
     this.cartPosition = "";
     this.picker = "";
+    this.message = "";
+  }
+
+  convertJSON(aResult: any){
+    this.errorIndex = aResult.errorIndex;
+    if(aResult.picked != null){
+      var anItem = new Item();
+      anItem.convertJSON(aResult.picked);
+      this.picked = anItem
+    }
+
+    if(aResult.correct != null){
+      var anItem = new Item();
+      anItem.convertJSON(aResult.correct);
+      this.correct = anItem;
+    }
+
+    this.wrongCartPosition = aResult.wrongCartPosition;
+    this.short = aResult.short;
+    this.overage = aResult.overage;
+    if(aResult.itemOverage != null){
+      var anItem = new Item();
+      anItem.convertJSON(aResult.itemOverage);
+      this.itemOverage = anItem;
+    }
+
+    if(aResult.itemShort != null)
+    {
+      var anItem = new Item();
+      anItem.convertJSON(aResult.itemShort);
+      this.itemShort = anItem;
+    }
+
+    this.routeNumber = aResult.routeNumber;
+    this.cartPosition = aResult.cartPosition;
+    this.picker = aResult.picker;
+    this.message = aResult.message;
   }
 }

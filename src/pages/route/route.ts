@@ -12,6 +12,7 @@ import { Stop } from '../models/stop';
 import { AddPickerPage } from '../addPicker/addpicker';
 import { Status } from '../models/status';
 import { AuditorService } from '../auditor.service';
+import { DataService } from '../data.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class RoutePage {
   routeIndex: number;
   pickers: Array<Picker> = [];
 
-  constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private modalCtrl: ModalController, private auditorService: AuditorService){
+  constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private modalCtrl: ModalController, private auditorService: AuditorService, private dataService: DataService){
     this.routeNumber = this.navParams.get('routeNumber');
     this.routeIndex = this.auditorService.getRouteIndex(this.routeNumber);
     this.theRoute = this.auditorService.getRoute(this.routeIndex);
@@ -49,8 +50,6 @@ export class RoutePage {
     */
   }
   
-  ionViewWillEnter(){
-  }
   ionViewWillLeave(){
     //this.storage.set('pickers', this.pickers);
   }
@@ -62,8 +61,7 @@ export class RoutePage {
     addPickerModal.present();
     addPickerModal.onDidDismiss(data => {
       if(data != null){
-	this.pickers.push(data);
-	console.log(this.pickers);
+	this.auditorService.addPicker(data);
       }
     });	
   }

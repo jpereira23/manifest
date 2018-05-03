@@ -6,6 +6,9 @@ import { Item } from '../../models/item';
 import { Error } from '../../models/error';
 import { Route } from '../../models/route';
 import { Storage } from '@ionic/storage';
+import { CartRequirements } from '../../models/cartRequirements';
+import { AuditorService } from '../../auditor.service';
+import { ConfirmErrorPage } from '../../confirmError/confirmError';
 
 @Component({
   selector: 'page-shorts',
@@ -13,17 +16,13 @@ import { Storage } from '@ionic/storage';
   })
 
 export class ShortsPage{
-  cartPosition: CartPosition;
-  endOfShift: EndOfShift;
-  correct: Item;
   short: number = 0;
-  route: Route;
-  constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage)
+  routeIndex: number;
+  cartRequirements: CartRequirements;
+  constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private auditorService: AuditorService)
   {
-    this.cartPosition = this.navParams.get('cartPosition');
-    this.endOfShift = this.navParams.get('endOfShift'); 
-    this.correct = this.navParams.get('correct');
-    this.route = this.navParams.get('route');
+    this.routeIndex = this.navParams.get('routeIndex');
+    this.cartRequirements = this.navParams.get('cartRequirements');
   }   
 
   subtract(){
@@ -34,23 +33,27 @@ export class ShortsPage{
   }
 
   add(){
-  this.short++;
+    this.short++;
   }
   
+  potentialError(){
+    
+  }
+
   generateError(){
     var error = new Error();
     error.errorIndex = 5;
-    error.itemShort = this.correct;
-    error.routeNumber = this.route.routeNumber;
-    error.cartPosition = this.cartPosition.cartPosition;
-    error.picker = this.cartPosition.picker.name;
+    error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
+    error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
     error.short = this.short;
-    this.endOfShift.errors.push(error);
-    this.navCtrl.pop();
+    error.message = error.picker + " was short " + error.short + " some short";
+    this.navCtrl.push(ConfirmErrorPage, {
+      error: error
+    });
   } 
 
   ionViewWillLeave(){
-    this.storage.set('endOfShift', this.endOfShift);
   }
 
 }

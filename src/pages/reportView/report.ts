@@ -2,8 +2,10 @@ import { Component, Input } from '@angular/core';
 import { EndOfShift } from '../models/endOfShift';
 import { NavController } from 'ionic-angular';
 import { Route } from '../models/route'; 
+import { Error } from '../models/error';
 import { Storage } from '@ionic/storage';
 import { Stop } from '../models/stop';
+import { AuditorService } from '../auditor.service';
 
 @Component({
   selector: 'page-report',
@@ -11,10 +13,13 @@ import { Stop } from '../models/stop';
   })
 
 export class ReportView{
-  @Input() endOfShift: EndOfShift; 
-  @Input() errors: Array<string>;
-  @Input() auditedRoutes: Array<Route>;
-  constructor(private storage: Storage, private navCtrl: NavController){ 
+  auditedRoutes: Array<Route> = [];
+  errors: Array<Error> = [];
+  errorTypes: Array<string> = ["Missing Cart Handle", "Damage Cart Handle", "Mis-Picks", "Wrap Issue", "Bun Error", "Shorts", "Wrong Cart", "Overages"];
+ 
+  constructor(private storage: Storage, private navCtrl: NavController, private auditorService: AuditorService){ 
+    this.auditedRoutes = this.auditorService.getAuditedRoutes(); 
+    this.errors = this.auditorService.getErrors();
   } 
 
   allStopsComplete(stop: Stop){
@@ -29,13 +34,6 @@ export class ReportView{
   }
 
   startNewShift(){
-    this.storage.set('endOfShift', null);
-    this.storage.set('pickers', null);
-    for(var i = 0; i < this.auditedRoutes.length; i++)
-    {	
-      this.storage.set(this.auditedRoutes[i].routeNumber, null);
-    } 
-
     this.navCtrl.pop();
   } 
 

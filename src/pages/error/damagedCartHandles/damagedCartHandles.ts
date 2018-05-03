@@ -5,6 +5,9 @@ import { EndOfShift } from '../../models/endOfShift';
 import { Route } from '../../models/route'; 
 import { Error } from '../../models/error';
 import { Storage } from '@ionic/storage';
+import { AuditorService } from '../../auditor.service';
+import { ConfirmErrorPage } from '../../confirmError/confirmError'; 
+import { CartRequirements } from '../../models/cartRequirements'; 
 
 @Component({
   selector: 'page-damagedcarthandles',
@@ -12,28 +15,28 @@ import { Storage } from '@ionic/storage';
 })
 
 export class DamagedCartHandles{
-  cartPosition: CartPosition;
-  endOfShift: EndOfShift;
-  route: Route;
-  constructor(private navCtrl: NavController, private navParams: NavParams, private storage: Storage)
+    routeIndex: number;
+    cartRequirements: CartRequirements;
+
+    constructor(private navCtrl: NavController, private navParams: NavParams, private storage: Storage, private auditorService: AuditorService)
   {
-    this.cartPosition = this.navParams.get('cartPosition');
-    this.endOfShift = this.navParams.get('endOfShift');
-    this.route = this.navParams.get('route');
+    this.routeIndex = this.navParams.get('routeIndex');
+    this.cartRequirements = this.navParams.get('cartRequirements');
   }
 
   generateError(){
     var error = new Error();
     error.errorIndex = 1;
-    error.picker = this.cartPosition.picker.name;
-    error.routeNumber = this.route.routeNumber;
-    error.cartPosition = this.cartPosition.cartPosition; 
-    this.endOfShift.errors.push(error);
-    this.navCtrl.pop();
+    error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
+    error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex); 
+    error.message = "Damaged Cart Handles on route " + error.routeNumber + ", the cart was picked by " + error.picker;
+    this.navCtrl.push(ConfirmErrorPage, {
+      error: error
+    });
   }
 
   ionViewWillLeave(){
-	this.storage.set('endOfShift', this.endOfShift);
   }
 }
 

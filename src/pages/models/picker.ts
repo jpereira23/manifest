@@ -14,6 +14,23 @@ export class Picker{
     this.errors = [];
     this.routes = [];
   }
+
+  convertJSON(aResult: any){
+    this.name = aResult.name;
+    for(var i = 0; i < aResult.errors.length; i++)
+    {
+      var aError = new Error();
+      aError.convertJSON(aResult.errors[i]);
+      this.errors.push(aError);
+    }
+
+    for(var j = 0; j < aResult.routes.length; j++)
+    {
+      var aRoute = new Route();
+      aRoute.convertStorage(aResult.routes[j]);
+      this.routes.push(aRoute);
+    }
+  }
   
   public addCartPosition(route: Route, cartPosition: CartPosition, status: Status, stop: Stop)
   {
@@ -125,18 +142,6 @@ export class Picker{
 
     return null;
     */
-  }
-
-  convertJSON(result: any){
-    this.name = result.name;
-    for(var i = 0; i < result.routes.length; i++){
-      this.routes.push(result.routes[i]);
-    } 
-
-    for(var j = 0; j < result.errors.length; j++){
-      var aResult = new Error();
-      this.errors.push(aResult);
-    }
   }
 }
 

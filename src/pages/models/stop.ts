@@ -33,6 +33,28 @@ export class Stop{
     return null;
   }
 
+  isRouteAudited(){
+    for(var i = 0; i < this.cartPositions.length; i++)
+    {
+      if(this.cartPositions[i].audited == true) 
+      {
+	return true;
+      }	
+    } 
+    return false;
+  }   
+
+  isAudited(cartIndex: number){
+    return this.cartPositions[cartIndex].isAudited();
+  }
+  getPicker(cartIndex){
+    return this.cartPositions[cartIndex].picker.name;
+  }
+
+  getCartPosition(cartIndex: number){
+    return this.cartPositions[cartIndex].cartPosition;
+  }
+
   getItemSelectedQuantity(itemIndex: number, cartIndex: number){
     return this.cartPositions[cartIndex].getItemSelectedQuantity(itemIndex);
   }

@@ -90,6 +90,7 @@ export class CartPositionPage {
     if(this.auditorService.getItemAuditedItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex) == this.auditorService.getItemAuditedItemsLength(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex))
     {
       this.auditorService.modifyCartAudited(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex, true);
+      this.auditorService.addAuditedRoute(this.routeIndex);
       this.auditorService.saveAudited(this.routeIndex);  
     }
     else 
@@ -106,8 +107,9 @@ export class CartPositionPage {
    */
   logErrors(i: number){
     this.navCtrl.push(ErrorsPage, {
-      endOfShift: this.endOfShift,
-      cartPosition: this.theCartPosition,
+      routeIndex: this.routeIndex,
+      cartRequirements: this.cartRequirements,
+      itemIndex: i,
       correct: this.theCartPosition.items[i]
     });
   }

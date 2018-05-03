@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
 import { Picker } from '../models/picker';
 import { Storage } from '@ionic/storage';
+import { DataService } from '../data.service';
 @Component({
   selector: 'page-add-picker',
   templateUrl: 'addpicker.html'
@@ -12,7 +13,7 @@ import { Storage } from '@ionic/storage';
     picker: Picker = new Picker();
     pickers: Array<Picker> = [];
     duplicate: boolean = false;
-    constructor(private viewCtrl: ViewController, private storage: Storage, private navParams: NavParams){
+    constructor(private viewCtrl: ViewController, private storage: Storage, private navParams: NavParams, private dataService: DataService){
       this.pickers = this.navParams.get('pickers');
     }
 
@@ -23,6 +24,7 @@ import { Storage } from '@ionic/storage';
     submit(){
       this.picker.name = this.name;
       if(this.testForDuplicate() == false){
+	this.dataService.addPicker(this.picker).subscribe();
 	this.viewCtrl.dismiss(this.picker)
       }
       this.duplicate = true;

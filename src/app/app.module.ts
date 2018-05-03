@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { RoutesPage } from '../pages/routes/routes';
 import { RoutePage } from '../pages/route/route';
+import { ConfirmErrorPage } from '../pages/confirmError/confirmError';
 import { CartPositionPage } from '../pages/cartPosition/cartPosition';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
@@ -41,6 +42,7 @@ import { AuditorService } from '../pages/auditor.service';
     CartHandlesPage,
     DamagedCartHandles,
     MisPickPage, 
+    ConfirmErrorPage,
     WrapIssuePage,
     ShortsPage, 
     OveragesPage,
@@ -78,7 +80,8 @@ import { AuditorService } from '../pages/auditor.service';
     ReportView,
     PickerView,
     AddPickerPage,
-    LoginPage
+    LoginPage,
+    ConfirmErrorPage
   ],
   providers: [
     DataService,

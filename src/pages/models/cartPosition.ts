@@ -26,8 +26,15 @@ export class CartPosition{
       aItem.convertStorage(aCartPosition.items[i])
       this.items.push(aItem);
     }
+
+    this.picker.name = aCartPosition.picker.name;
+    /** please finish errors and routes when we get to it **/
   }
 
+
+  isAudited(){
+    return this.audited;
+  }
   getItemQuantity(itemIndex: number){
     return this.items[itemIndex].quantity;
   }

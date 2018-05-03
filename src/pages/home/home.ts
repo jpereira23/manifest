@@ -6,6 +6,7 @@ import { RoutesPage } from '../routes/routes';
 import { EndOfShift } from '../models/endOfShift';
 import { Item } from '../models/item';
 import { LoginPage } from '../login/login';
+import { Picker } from '../models/picker';
 import { AuditorService } from '../auditor.service';
 import { Auditor } from '../models/auditor';
 import { RouteDate } from '../models/routeDate';
@@ -30,6 +31,7 @@ export class HomePage {
     this.auditorService.isAuditor.subscribe(val => {
       if(val == false)
       {
+
 	  this.modal = this.modalCtrl.create(LoginPage);
 	  this.modal.present();
 	  this.modal.onDidDismiss((data) => {
@@ -40,9 +42,24 @@ export class HomePage {
 	    }
        });
       }
+
+      this.dataService.getPickers().subscribe(res => this.convertPickers(res));
     });
     
   }
+
+  convertPickers(thePickers){
+    var pickers: Array<Picker> = [];
+    for(var i = 0; i < thePickers.length; i++)
+    {
+      var aPicker = new Picker();
+      aPicker.convertJSON(thePickers[i]);
+      pickers.push(aPicker);
+    }
+    this.auditorService.setPickers(pickers);
+  }
+
+
 
   ionViewWillEnter(){
   }
@@ -62,9 +79,7 @@ export class HomePage {
       }); 
     }
     */
-    console.log("FUCK");
     this.auditorService.initializeRoutes(this.selectedRoutes);
-    //this.auditorService.setAuditor(this.selectedRoutes);
 
     this.navCtrl.push(RoutesPage, {
       selectedRoutes: this.selectedRoutes,

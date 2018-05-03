@@ -9,7 +9,7 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      {{ cartPosition.picker }}
+      {{ auditorService.getCartPosition(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex) }}
     </ion-row>
     <ion-row>
       Item: {{ correct.itemName }}
@@ -28,7 +28,7 @@
       </ion-item>
     </ion-row>
     <ion-row>
-      Correct Cart: {{ cartPosition.cartPosition }}
+      Correct Cart: {{ auditorService.getCartPosition(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex) }}
     </ion-row>
   </ion-grid>
 

@@ -6,6 +6,9 @@ import { Error } from '../../models/error';
 import { Item } from '../../models/item';
 import { Route } from '../../models/route';
 import { Storage } from '@ionic/storage';
+import { CartRequirements } from '../../models/cartRequirements';
+import { ConfirmErrorPage } from '../../confirmError/confirmError';
+import { AuditorService } from '../../auditor.service';
 
 @Component({
   selector: 'page-overages',
@@ -13,17 +16,15 @@ import { Storage } from '@ionic/storage';
   })
 
 export class OveragesPage{
-  cartPosition: CartPosition;
-  endOfShift: EndOfShift;
-  route: Route;
   correct: Item;
   overage: number = 0;
-  constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage)
+  routeIndex: number;
+  cartRequirements: CartRequirements; 
+
+  constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private auditorService: AuditorService)
   {
-    this.cartPosition = this.navParams.get('cartPosition');
-    this.endOfShift = this.navParams.get('endOfShift');
-    this.route = this.navParams.get('route');
-    this.correct = this.navParams.get('correct');
+    this.routeIndex = this.navParams.get('routeIndex');
+    this.cartRequirements = this.navParams.get('cartRequirements');
   }
 
   subtract(){
@@ -40,16 +41,16 @@ export class OveragesPage{
     var error = new Error();
     error.errorIndex = 7;
     error.overage = this.overage;
-    error.routeNumber = this.route.routeNumber;
-    error.cartPosition = this.cartPosition.cartPosition;
-    error.picker = this.cartPosition.picker.name;
+    error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
+    error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
     error.itemOverage = this.correct;
-    this.endOfShift.errors.push(error);
-    this.navCtrl.pop();
+    this.navCtrl.push(ConfirmErrorPage, {
+      error: error
+    });
   }
 
   ionViewWillLeave(){
-    this.storage.set('endOfShift', this.endOfShift);
   }
   
 }
