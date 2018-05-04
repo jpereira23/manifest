@@ -6,6 +6,7 @@ import { Error } from '../models/error';
 import { Storage } from '@ionic/storage';
 import { Stop } from '../models/stop';
 import { AuditorService } from '../auditor.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'page-report',
@@ -17,7 +18,7 @@ export class ReportView{
   errors: Array<Error> = [];
   errorTypes: Array<string> = ["Missing Cart Handle", "Damage Cart Handle", "Mis-Picks", "Wrap Issue", "Bun Error", "Shorts", "Wrong Cart", "Overages"];
  
-  constructor(private storage: Storage, private navCtrl: NavController, private auditorService: AuditorService){ 
+  constructor(private storage: Storage, private navCtrl: NavController, private auditorService: AuditorService, private dataService: DataService){ 
     this.auditedRoutes = this.auditorService.getAuditedRoutes(); 
     this.errors = this.auditorService.getErrors();
   } 
@@ -34,6 +35,7 @@ export class ReportView{
   }
 
   startNewShift(){
+    this.dataService.sendEndOfShift(this.auditorService.getAuditor()).subscribe();
     this.navCtrl.pop();
   } 
 

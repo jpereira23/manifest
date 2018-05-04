@@ -23,6 +23,10 @@ export class DataService {
     return this._http.get(this.url + 'getPickers').map(res => { return res.json().data });
   }
 
+  sendEndOfShift(auditor){
+    return this._http.post(this.url + 'sendEndOfShift', JSON.stringify(auditor), { headers: this.headers }).map(res => res.json());
+  } 
+
   addPicker(picker){
     return this._http.post(this.url + 'addPicker', JSON.stringify(picker), { headers: this.headers }).map(res => res.json());
   }

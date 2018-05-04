@@ -57,6 +57,10 @@ export class AuditorService {
     }
   }
 
+  getAuditor(){
+    return this.auditor;
+  }
+
   removePotentialError(i: number){
     this.auditor.potentialErrors.splice(i, 1);
   }
