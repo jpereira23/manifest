@@ -32,7 +32,6 @@ export class Route{
   } 
 
   isRouteAudited(){
-  console.log("1");
     for(var i = 0; i < this.statuss.length; i++){
       if(this.statuss[i].isRouteAudited() == true){
 	return true;
@@ -41,6 +40,9 @@ export class Route{
     return false;
   }
 
+  getCartPositions(statusIndex: number, stopIndex: number){
+    return this.statuss[statusIndex].getCartPositions(stopIndex);
+  } 
   isAudited(statusIndex: number, stopIndex: number, cartIndex: number){
     return this.statuss[statusIndex].isAudited(stopIndex, cartIndex);
   }

@@ -6,6 +6,7 @@ import { EndOfShift } from '../models/endOfShift';
 import { Item } from '../models/item';
 import { EndOfShiftPage } from '../endOfShift/endOfShift';
 import { AuditorService } from '../auditor.service';
+import { ErrorCenterPage } from '../errorCenter/errorCenter';
  
 
 @Component({ 
@@ -23,8 +24,8 @@ export class RoutesPage {
     this.endOfShift = this.navParams.get('endOfShift');
   }
 
-  ionicViewWillEnter(){
-    
+  ionViewWillEnter(){
+    this.auditorService.checkPotentialErrors();    
   }
 
   ionViewWillLeave(){
@@ -35,6 +36,10 @@ export class RoutesPage {
       routeNumber: route.routeNumber, 
       endOfShift: this.endOfShift
     });
+  }
+
+  errorCenter(){
+    this.navCtrl.push(ErrorCenterPage);
   }
 
   generateEndOfShift(){

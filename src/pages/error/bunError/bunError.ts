@@ -17,22 +17,28 @@ import { ConfirmErrorPage } from '../../confirmError/confirmError';
 export class BunErrorPage {
   routeIndex: number;
   cartRequirements: CartRequirements;
+  error: Error = new Error();
 
   constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private auditorService: AuditorService){
     this.routeIndex = this.navParams.get('routeIndex');
     this.cartRequirements = this.navParams.get('cartRequirements');
+    this.error.errorIndex = 4;
+    this.error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    this.error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
+    this.error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    this.error.message = "Bun Error on route " + this.error.routeNumber;
+
   }
 
   generateError(){
-    var error = new Error();
-    error.errorIndex = 4;
-    error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
-    error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
-    error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
-    error.message = "Bun Error on route " + error.routeNumber;
     this.navCtrl.push(ConfirmErrorPage, {
-      error: error
+      error: this.error
     });
+  }
+
+  potentialError(){
+    this.auditorService.addPotentialError(this.error);
+    this.navCtrl.pop();
   }
   
   ionViewWillLeave(){

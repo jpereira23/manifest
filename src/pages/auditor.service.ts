@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'; 
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Auditor } from './models/auditor';
 import { Route } from './models/route';
 import { Picker } from './models/picker';
@@ -15,7 +16,7 @@ export class AuditorService {
   isAuditor = new Subject<boolean>();
   isRoutes = new Subject<boolean>();
   
-  constructor(private storage: Storage){
+  constructor(private storage: Storage, private localNotifications: LocalNotifications){
     this.storage.get('firstName').then((val) => {
       if(val == null){
 	this.isAuditor.next(false);
@@ -43,6 +44,30 @@ export class AuditorService {
     this.storage.set('errors', this.auditor.errors);
   }
 
+  checkPotentialErrors(){
+    console.log("CHECKING POTENTIAL ERRORS");
+    if(this.auditor.potentialErrors.length > 0)
+    {
+      this.localNotifications.schedule({
+	id: 1,
+	text: 'You have ' + this.auditor.potentialErrors.length + ' potential errors.',
+	sound: null,
+	data: {}
+      });
+    }
+  }
+
+  removePotentialError(i: number){
+    this.auditor.potentialErrors.splice(i, 1);
+  }
+
+  addPotentialError(error: Error){
+    this.auditor.potentialErrors.push(error);
+  } 
+
+  getPotentialErrors(){
+    return this.auditor.potentialErrors;
+  }
   setAuditor(auditor: Auditor){
     this.storage.ready().then(() => {
       this.storage.set('firstName', auditor.firstName);
@@ -187,6 +212,10 @@ export class AuditorService {
 
   getItemAudited(routeIndex: number, itemIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
     return this.auditor.routes[routeIndex].getItemAudited(itemIndex, statusIndex, stopIndex, cartIndex);
+  }
+
+  getCartPositions(routeIndex: number, statusIndex: number, stopIndex: number){
+    return this.auditor.routes[routeIndex].getCartPositions(statusIndex, stopIndex);
   }
 
   getCartPosition(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex){

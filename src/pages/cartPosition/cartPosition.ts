@@ -110,7 +110,7 @@ export class CartPositionPage {
       routeIndex: this.routeIndex,
       cartRequirements: this.cartRequirements,
       itemIndex: i,
-      correct: this.theCartPosition.items[i]
+      correct: this.auditorService.getItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex)[i]
     });
   }
 

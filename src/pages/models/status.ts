@@ -36,6 +36,10 @@ export class Status{
     }
   }
 
+  getCartPositions(stopIndex: number){
+    return this.stops[stopIndex].cartPositions;
+  }
+
   isRouteAudited(){
   console.log("2");
     for(var i = 0; i < this.stops.length; i++){

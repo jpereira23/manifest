@@ -21,7 +21,7 @@
       <ion-item>
 	<ion-label>Wrong Cart</ion-label>
 	<ion-select [(ngModel)]="error.wrongCartPosition">
-	  <ion-option *ngFor="let cart of cartPositions" [value]="cart.cartPosition">
+	  <ion-option *ngFor="let cart of auditorService.getCartPositions(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex)" [value]="cart.cartPosition">
 	    {{ cart.cartPosition }}
 	  </ion-option>
 	</ion-select>
@@ -33,4 +33,5 @@
   </ion-grid>
 
   <button ion-button color="blue" outline (click)="generateError()">Confirm Error</button> 
+  <button ion-button color="blue" outline (click)="potentialError()">Potential Error</button>
 </ion-content>

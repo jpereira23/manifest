@@ -19,10 +19,16 @@ export class ShortsPage{
   short: number = 0;
   routeIndex: number;
   cartRequirements: CartRequirements;
+  error: Error = new Error();
   constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private auditorService: AuditorService)
   {
     this.routeIndex = this.navParams.get('routeIndex');
     this.cartRequirements = this.navParams.get('cartRequirements');
+    this.error.errorIndex = 5;
+    this.error.itemShort = this.navParams.get('correct');
+    this.error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
+    this.error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    this.error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
   }   
 
   subtract(){
@@ -37,19 +43,18 @@ export class ShortsPage{
   }
   
   potentialError(){
-    
+    this.error.short = this.short;
+    this.error.message = "Short on route " + this.error.routeNumber + ", cart " + this.error.cartPosition + ", picker " + this.error.picker + " shorted " + this.error.short + " " + this.error.itemShort.itemName;
+    this.auditorService.addPotentialError(this.error);   
+    this.navCtrl.pop();
   }
 
   generateError(){
-    var error = new Error();
-    error.errorIndex = 5;
-    error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
-    error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
-    error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
-    error.short = this.short;
-    error.message = error.picker + " was short " + error.short + " some short";
+    this.error.short = this.short;
+    this.error.message = "Short on route " + this.error.routeNumber + ", cart " + this.error.cartPosition + ", picker " + this.error.picker + " shorted " + this.error.short + " " + this.error.itemShort.itemName;
+
     this.navCtrl.push(ConfirmErrorPage, {
-      error: error
+      error: this.error
     });
   } 
 

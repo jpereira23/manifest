@@ -20,11 +20,19 @@ export class OveragesPage{
   overage: number = 0;
   routeIndex: number;
   cartRequirements: CartRequirements; 
+  error: Error = new Error();
 
   constructor(private navParams: NavParams, private navCtrl: NavController, private storage: Storage, private auditorService: AuditorService)
   {
     this.routeIndex = this.navParams.get('routeIndex');
     this.cartRequirements = this.navParams.get('cartRequirements');
+    this.correct = this.navParams.get('correct');
+    this.error.errorIndex = 7;
+    this.error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
+    this.error.itemOverage = this.correct;
+    this.error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+    this.error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+
   }
 
   subtract(){
@@ -37,16 +45,20 @@ export class OveragesPage{
     this.overage++;
   }
 
+
+  potentialError(){
+    this.error.overage = this.overage;
+    this.error.message = "Overage on route " + this.error.routeNumber + ", cart " + this.error.cartPosition + ", picker " + this.error.picker + " was over " + this.overage + " " + this.error.itemOverage.itemName;
+    this.auditorService.addPotentialError(this.error); 
+    this.navCtrl.pop();
+  }
+
   confirmError(){
-    var error = new Error();
-    error.errorIndex = 7;
-    error.overage = this.overage;
-    error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
-    error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
-    error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
-    error.itemOverage = this.correct;
+    this.error.overage = this.overage;
+    this.error.message = "Overage on route " + this.error.routeNumber + ", cart " + this.error.cartPosition + ", picker " + this.error.picker + " was over " + this.overage + " " + this.error.itemOverage.itemName;
+
     this.navCtrl.push(ConfirmErrorPage, {
-      error: error
+      error: this.error
     });
   }
 

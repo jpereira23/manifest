@@ -24,14 +24,20 @@ export class MisPickPage {
     this.cartRequirements = this.navParams.get('cartRequirements');
     this.error.correct = this.navParams.get('correct');
     this.error.picked = new Item();
-  }
-
-  generateRoutes(){
     this.error.errorIndex = 2;
     this.error.picker = this.auditorService.getPicker(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
     this.error.routeNumber = this.auditorService.getRouteNumber(this.routeIndex);
     this.error.cartPosition = this.auditorService.getCartPosition(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
     this.error.message = "Mis Pick on route " + this.error.routeNumber + " on cart " + this.error.cartPosition + ", " + this.error.picker + " selected a " + this.error.picked.itemName + " instead of a " + this.error.correct.itemName;
+
+  }
+
+  potentialError(){
+    this.auditorService.addPotentialError(this.error);
+    this.navCtrl.pop();
+  }
+
+  generateRoutes(){
     this.navCtrl.push(ConfirmErrorPage, {
       error: this.error
     });

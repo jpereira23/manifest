@@ -3,7 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { RoutesPage } from '../pages/routes/routes';
@@ -26,6 +26,7 @@ import { ReportView } from '../pages/reportView/report';
 import { PickerView } from '../pages/pickerView/picker';
 import { AddPickerPage } from '../pages/addPicker/addpicker';
 import { LoginPage } from '../pages/login/login'; 
+import { ErrorCenterPage } from '../pages/errorCenter/errorCenter';
 
 
 import { DataService } from '../pages/data.service';
@@ -38,6 +39,7 @@ import { AuditorService } from '../pages/auditor.service';
     RoutesPage,
     RoutePage,
     CartPositionPage,
+    ErrorCenterPage,
     ErrorsPage,
     CartHandlesPage,
     DamagedCartHandles,
@@ -74,6 +76,7 @@ import { AuditorService } from '../pages/auditor.service';
     WrapIssuePage,
     ShortsPage,
     OveragesPage,
+    ErrorCenterPage,
     EndOfShiftPage,
     BunErrorPage,
     WrongCartPage,
@@ -86,6 +89,7 @@ import { AuditorService } from '../pages/auditor.service';
   providers: [
     DataService,
     AuditorService,
+    LocalNotifications,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
