@@ -31,6 +31,14 @@ export class Route{
     return aCartRequirement;
   } 
 
+  reSetItems(statusIndex, stopIndex, cartIndex){
+    this.statuss[statusIndex].reSetItems(stopIndex, cartIndex);
+  } 
+
+  filterItems(aVal: string, statusIndex: number, stopIndex: number, cartIndex: number){
+    this.statuss[statusIndex].filterItems(aVal, stopIndex, cartIndex);
+  }
+
   isRouteAudited(){
     for(var i = 0; i < this.statuss.length; i++){
       if(this.statuss[i].isRouteAudited() == true){

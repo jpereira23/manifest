@@ -44,6 +44,14 @@ export class AuditorService {
     this.storage.set('errors', this.auditor.errors);
   }
 
+  reSetItems(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    this.auditor.routes[routeIndex].reSetItems(statusIndex, stopIndex, cartIndex);
+  }
+
+  filterItems(aVal: string, routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    this.auditor.routes[routeIndex].filterItems(aVal, statusIndex, stopIndex, cartIndex);
+  }
+
   checkPotentialErrors(){
     console.log("CHECKING POTENTIAL ERRORS");
     if(this.auditor.potentialErrors.length > 0)
@@ -55,6 +63,20 @@ export class AuditorService {
 	data: {}
       });
     }
+  }
+  
+  clearSystem(){
+    this.storage.clear().then(() => {
+      this.auditor.routes = [];
+      this.auditor.auditedRoutes = []; 
+      this.auditor.potentialErrors = [];
+      this.auditor.errors = [];
+      this.setAuditor(this.auditor);
+    });
+  }
+
+  getAuditor(){
+    return this.auditor;
   }
 
   removePotentialError(i: number){

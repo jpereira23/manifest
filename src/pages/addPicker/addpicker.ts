@@ -10,11 +10,16 @@ import { DataService } from '../data.service';
 
   export class AddPickerPage{
     name: string = "";
+    loaded: boolean = false;
     picker: Picker = new Picker();
     pickers: Array<Picker> = [];
     duplicate: boolean = false;
     constructor(private viewCtrl: ViewController, private storage: Storage, private navParams: NavParams, private dataService: DataService){
-      this.pickers = this.navParams.get('pickers');
+    this.dataService.getPickers().subscribe(res => {
+      this.pickers = res;
+      this.loaded = true;
+    });
+      console.log(this.pickers);
     }
 
     dismiss(){
@@ -27,9 +32,9 @@ import { DataService } from '../data.service';
 	this.dataService.addPicker(this.picker).subscribe();
 	this.viewCtrl.dismiss(this.picker)
       }
-      this.duplicate = true;
-      //this.viewCtrl.dismiss(this.picker);
-
+      else{
+	this.duplicate = true;
+      }
     }
 
     testForDuplicate(){

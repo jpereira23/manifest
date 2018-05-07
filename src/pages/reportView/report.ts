@@ -19,6 +19,7 @@ export class ReportView{
  
   constructor(private storage: Storage, private navCtrl: NavController, private auditorService: AuditorService){ 
     this.auditedRoutes = this.auditorService.getAuditedRoutes(); 
+    console.log(this.auditedRoutes);
     this.errors = this.auditorService.getErrors();
   } 
 
@@ -34,8 +35,8 @@ export class ReportView{
   }
 
   startNewShift(){
+    this.auditorService.clearSystem();
+    this.navCtrl.pop();
     this.navCtrl.pop();
   } 
-
-
 }

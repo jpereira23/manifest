@@ -4,6 +4,7 @@ import { Picker } from './picker';
 export class CartPosition{
   cartPosition: string;
   items: Array<Item>;
+  backUpItems: Array<Item>;
   audited: boolean;
   auditedItems: number;
   picker: Picker;
@@ -11,6 +12,7 @@ export class CartPosition{
   constructor(){
     this.cartPosition = "";
     this.items = [];
+    this.backUpItems = [];
     this.picker = new Picker();
     this.audited = false;
     this.auditedItems = 0;
@@ -25,11 +27,23 @@ export class CartPosition{
       var aItem = new Item();
       aItem.convertStorage(aCartPosition.items[i])
       this.items.push(aItem);
+      this.backUpItems.push(aItem);
     }
 
     this.picker.name = aCartPosition.picker.name;
     /** please finish errors and routes when we get to it **/
+
   }
+
+  reSetItems(){
+    this.items = this.backUpItems;
+  }
+
+  filterItems(aVal: string){
+    this.items = this.items.filter((item) => {
+      return (item.wrin.indexOf(aVal) > -1);
+    }); 
+  }   
 
 
   isAudited(){
@@ -76,6 +90,7 @@ export class CartPosition{
       anItem.convertJSON(cartPosition.items[i]);
 
       this.items.push(anItem);
+      this.backUpItems.push(anItem);
     }
   }
 }

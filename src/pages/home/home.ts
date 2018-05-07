@@ -31,13 +31,11 @@ export class HomePage {
     this.auditorService.isAuditor.subscribe(val => {
       if(val == false)
       {
-
 	  this.modal = this.modalCtrl.create(LoginPage);
 	  this.modal.present();
 	  this.modal.onDidDismiss((data) => {
 	    if(data != null){	
 	      this.auditor = data;
-	      console.log("WTF");
 	      this.auditorService.setAuditor(this.auditor);
 	    }
        });

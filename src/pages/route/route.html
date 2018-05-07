@@ -14,9 +14,6 @@
       </button>
     </ion-buttons>  
   </ion-navbar>
-</ion-header>
-
-<ion-content padding> 
   <ion-item>
     <ion-label>Stop</ion-label>
     <ion-select [(ngModel)]="selectedStop">
@@ -25,7 +22,9 @@
       </ion-option>
     </ion-select>
   </ion-item>
-  
+</ion-header>
+
+<ion-content padding> 
   <ion-item-group *ngFor="let aStatus of theRoute.statuss; let h = index">
     <ion-item-divider color="light">{{ aStatus.status }} <ion-icon *ngIf="thisHotRoute(selectedStop) == true" name="flame"></ion-icon></ion-item-divider>
     <ion-card *ngFor="let stop of aStatus.stops; let i = index">

@@ -44,25 +44,23 @@ export class CartPositionPage {
     this.pickers = this.navParams.get('pickers');
   }
 
-  initializeItems(){
-    this.theCartPosition.items = this.backUpItems;
-  } 
-  
-
   /** 
    * getItems function is used for the search bar in the cartPosition.html 
    *
    *
    */
   getItems(ev: any){
-    this.initializeItems();
+    this.auditorService.reSetItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
 
     let val = ev.target.value;
     if(val && val.trim() != ''){
+      this.auditorService.filterItems(val, this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex);
+      /*
       this.theCartPosition.items = this.theCartPosition.items.filter((item) => {
 	console.log(item.wrin.indexOf(val));
 	return (item.wrin.indexOf(val) > -1);
       }); 
+      */
     } 
   }
 

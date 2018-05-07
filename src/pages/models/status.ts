@@ -27,6 +27,14 @@ export class Status{
     }
   }
 
+  reSetItems(stopIndex, cartIndex){
+    this.stops[stopIndex].reSetItems(cartIndex);
+  }   
+
+  filterItems(aVal: string, stopIndex: number, cartIndex: number){
+    this.stops[stopIndex].filterItems(aVal, cartIndex);
+  }
+
   getCart(stopNumber:string, cartPosition: string){
     for(var i = 0; i < this.stops.length; i++){
       if(this.stops[i].stopNumber == stopNumber)
