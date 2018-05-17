@@ -31,6 +31,12 @@ export class Route{
     return aCartRequirement;
   } 
 
+  deleteAllNonAudited(cartPositionObject: any){
+    for(var i = 0; i < this.statuss.length; i++){
+      this.statuss[i].deleteAllNonAudited(cartPositionObject, this.routeNumber);
+    }
+  }
+
   reSetItems(statusIndex, stopIndex, cartIndex){
     this.statuss[statusIndex].reSetItems(stopIndex, cartIndex);
   } 

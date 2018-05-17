@@ -6,6 +6,7 @@ import { Error } from '../models/error';
 import { Storage } from '@ionic/storage';
 import { Stop } from '../models/stop';
 import { AuditorService } from '../auditor.service';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'page-report',
@@ -16,11 +17,21 @@ export class ReportView{
   auditedRoutes: Array<Route> = [];
   errors: Array<Error> = [];
   errorTypes: Array<string> = ["Missing Cart Handle", "Damage Cart Handle", "Mis-Picks", "Wrap Issue", "Bun Error", "Shorts", "Wrong Cart", "Overages"];
- 
-  constructor(private storage: Storage, private navCtrl: NavController, private auditorService: AuditorService){ 
+  clearingShiftBegun: boolean = false;
+  loadProgress: number = 0;
+  cartPositionObject: any = null; 
+  constructor(private storage: Storage, private navCtrl: NavController, private auditorService: AuditorService, private dataService: DataService){ 
     this.auditedRoutes = this.auditorService.getAuditedRoutes(); 
     console.log(this.auditedRoutes);
     this.errors = this.auditorService.getErrors();
+    this.cartPositionObject = {
+      totalCartPositions: 0,
+      cartPositionsAudited: 0,
+      message: "Initiating Archiving for end of shift",
+      routes: [], 
+      loadProgress: 0,
+      errors: []
+    };
   } 
 
   allStopsComplete(stop: Stop){
@@ -35,8 +46,18 @@ export class ReportView{
   }
 
   startNewShift(){
-    this.auditorService.clearSystem();
-    this.navCtrl.pop();
-    this.navCtrl.pop();
+    this.clearingShiftBegun = true;
+    this.cartPositionObject.loadProgress = 1;
+    this.auditorService.clearSystem(this.cartPositionObject); 
+    this.auditorService.finishedClearing.subscribe(val => {
+      var anAuditor = this.auditorService.getAuditor();
+      anAuditor.auditedRoutes = this.cartPositionObject.routes; 
+      anAuditor.errors = this.cartPositionObject.errors;
+      this.cartPositionObject.errors = [];
+      this.cartPositionObject.routes = [];
+      this.dataService.sendEndOfShift(anAuditor).subscribe();
+      this.navCtrl.pop();
+    });
+    
   } 
 }

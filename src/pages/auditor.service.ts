@@ -15,6 +15,7 @@ export class AuditorService {
   isLoaded = new Subject<boolean>();
   isAuditor = new Subject<boolean>();
   isRoutes = new Subject<boolean>();
+  finishedClearing = new Subject<boolean>();
   
   constructor(private storage: Storage, private localNotifications: LocalNotifications){
     this.storage.get('firstName').then((val) => {
@@ -65,14 +66,39 @@ export class AuditorService {
     }
   }
   
-  clearSystem(){
-    this.storage.clear().then(() => {
-      this.auditor.routes = [];
-      this.auditor.auditedRoutes = []; 
-      this.auditor.potentialErrors = [];
-      this.auditor.errors = [];
-      this.setAuditor(this.auditor);
-    });
+  clearSystem(cartPositionObject: any){
+    var arrayOfAudited: Array<Route> = [];
+    var counter = 0;
+    console.log("HELLO?");
+    for(var i = 0; i < this.auditor.auditedRoutes.length; i++)
+    {
+      this.storage.get(this.auditor.auditedRoutes[i].routeNumber).then((val) => {
+	console.log("WOOOH");
+	if(val != null){
+	  var aRoute = new Route();
+	  aRoute.convertStorage(val);
+	  aRoute.deleteAllNonAudited(cartPositionObject);
+	  arrayOfAudited.push(aRoute);
+	}
+	counter++;
+	console.log("this.auditor.auditedRoutes.length = " + this.auditor.auditedRoutes.length);
+	console.log("counter = " + counter);
+	if(counter == this.auditor.auditedRoutes.length)
+	{
+	  cartPositionObject.loadProgress = 25; 
+	  cartPositionObject.routes = arrayOfAudited;
+	  cartPositionObject.errors = this.auditor.errors;
+	  this.finishedClearing.next(true);
+	  this.storage.clear().then(() => {
+	    this.auditor.routes = [];
+	    this.auditor.auditedRoutes = []; 
+	    this.auditor.potentialErrors = [];
+	    this.auditor.errors = [];
+	    this.setAuditor(this.auditor);
+	  });
+	}
+      });
+    }  
   }
 
   getAuditor(){

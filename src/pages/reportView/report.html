@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="clearingShiftBegun == false">
   <div *ngFor="let aRoute of auditedRoutes">
       <div *ngIf="aRoute.bunsAudited == true">
 	{{ aRoute.routeNumber }}'s buns are audited
@@ -25,4 +25,14 @@
     </ul>
   
   <button ion-button color="blue" outline (click)="startNewShift()">Clear Shift</button>
+
+  
+</div>
+<div *ngIf="clearingShiftBegun == true">
+  <progressBar [progress]="cartPositionObject.loadProgress"></progressBar>
+  <div *ngIf="cartPositionObject == null">
+  </div>
+  <div *ngIf="cartPositionObject != null">
+    {{ cartPositionObject.message }} 
+  </div>
 </div>

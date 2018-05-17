@@ -31,6 +31,13 @@ export class Status{
     this.stops[stopIndex].reSetItems(cartIndex);
   }   
 
+  deleteAllNonAudited(cartPositionObject: any, routeNumber: string){
+    for(var i = 0; i < this.stops.length; i++)
+    {
+      this.stops[i].deleteAllNonAudited(cartPositionObject, routeNumber);
+    }	
+  }
+
   filterItems(aVal: string, stopIndex: number, cartIndex: number){
     this.stops[stopIndex].filterItems(aVal, cartIndex);
   }

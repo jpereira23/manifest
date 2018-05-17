@@ -4,11 +4,12 @@ import 'rxjs/add/operator/map';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { Route } from './models/route';
 import { Item } from './models/item'; 
+import { Auditor } from './models/auditor';
 
 @Injectable()
 export class DataService {
-  url: string = "http://172.124.232.210:443/api/";
-  //url: string = "http://localhost:3000/api/";
+  //url: string = "http://172.124.232.210:443/api/";
+  url: string = "http://localhost:3000/api/";
   headers = new Headers();
   result: any;
   constructor(private _http: Http){
@@ -26,6 +27,10 @@ export class DataService {
   addPicker(picker){
     return this._http.post(this.url + 'addPicker', JSON.stringify(picker), { headers: this.headers }).map(res => res.json());
   }
+
+  sendEndOfShift(auditor: Auditor){
+    return this._http.post(this.url + 'sendEndOfShift', JSON.stringify(auditor), { headers: this.headers }).map(res => res.json());
+  } 
   
   manifestConvert(aResult: any)
   {

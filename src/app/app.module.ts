@@ -11,6 +11,7 @@ import { RoutePage } from '../pages/route/route';
 import { ConfirmErrorPage } from '../pages/confirmError/confirmError';
 import { CartPositionPage } from '../pages/cartPosition/cartPosition';
 import { HttpModule } from '@angular/http';
+import { ProgressBarComponent } from '../pages/progressBar/progressBar';
 import { IonicStorageModule } from '@ionic/storage';
 import { ErrorsPage } from '../pages/errors/errors';
 import { CartHandlesPage } from '../pages/error/cartHandles/cartHandles';
@@ -39,6 +40,7 @@ import { AuditorService } from '../pages/auditor.service';
     RoutesPage,
     RoutePage,
     CartPositionPage,
+    ProgressBarComponent,
     ErrorCenterPage,
     ErrorsPage,
     CartHandlesPage,
@@ -82,6 +84,7 @@ import { AuditorService } from '../pages/auditor.service';
     WrongCartPage,
     ReportView,
     PickerView,
+    ProgressBarComponent,
     AddPickerPage,
     LoginPage,
     ConfirmErrorPage

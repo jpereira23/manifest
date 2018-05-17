@@ -41,6 +41,19 @@ export class Stop{
     return null;
   }
 
+  deleteAllNonAudited(cartPositionObject: any, routeNumber: string){
+    cartPositionObject.totalCartPositions = cartPositionObject.totalCartPositions + this.cartPositions.length;
+    for(var i = 0; i < this.cartPositions.length; i++)
+    {
+      if(this.cartPositions[i].audited == false){
+	this.cartPositions.splice(i, 1);
+      } else {
+	cartPositionObject.message = "In route " + routeNumber + ": counter Cart Position " + this.cartPositions[i].cartPosition + " as audited.";
+	cartPositionObject.cartPositionsAudited++;	  
+      }
+    }
+  }
+
   isRouteAudited(){
     for(var i = 0; i < this.cartPositions.length; i++)
     {
