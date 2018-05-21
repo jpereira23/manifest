@@ -38,7 +38,7 @@ export class AuditorService {
 	  if(pEr != null){
 	    this.auditor.potentialErrors = pEr;
 	  } else {
-	    this.potentialErrors = [];
+	    this.auditor.potentialErrors = [];
 	  }
 	});
 	this.isAuditor.next(true);
@@ -266,6 +266,4 @@ export class AuditorService {
       this.storage.set(this.auditor.routes[routeIndex].routeNumber, this.auditor.routes[routeIndex]);
     });
   }
-  
-  
 }

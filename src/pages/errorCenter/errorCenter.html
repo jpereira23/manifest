@@ -9,7 +9,11 @@
 <ion-content padding>
   <ion-list>
     <ion-card *ngFor="let error of potentialErrors; let i = index">
-      <ion-card-title>{{ error.typeOfError[error.errorIndex] }} </ion-card-title>
+      <ion-item>
+      <ion-icon name="warning" item-start></ion-icon>
+      <h2>{{ error.typeOfError[error.errorIndex] }} <span *ngIf="error.errorIndex == 2"> on {{ error.correct.itemName }}</span><span *ngIf="error.errorIndex == 5"> on {{ error.itemShort.itemName }}</span><span *ngIf="error.errorIndex == 6"> on {{ error.picked.itemName }}</span><span *ngIf="error.errorIndex == 7"> on {{ error.itemOverage.itemName }}</span> </h2>
+      </ion-item>
+      <ion-card-content>
       <div *ngIf="error.errorIndex == 0 || error.errorIndex == 1 || error.errorIndex == 3">
 	Route: {{ error.routeNumber }}<br>
 	Cart Position: {{ error.cartPosition }}<br>
@@ -21,6 +25,7 @@
 	Picker: {{ error.picker }} <br>
 	Correct Item: {{ error.correct.itemName }} <br>
 	Wrong Item: {{ error.picked.itemName }} <br>
+	Location: {{ error.correct.alocation }} <br>
       </div>
       <div *ngIf="error.errorIndex == 4">
 	Route: {{ error.routeNumber }} <br>
@@ -31,6 +36,7 @@
 	Picker: {{ error.picker }} <br>
 	Item: {{ error.itemShort.itemName }} <br>
 	Short: {{ error.short }} <br>
+	Location: {{ error.itemShort.alocation }} <br>
       </div>
       <div *ngIf="error.errorIndex == 6">
 	Route: {{ error.routeNumber }} <br>
@@ -38,6 +44,7 @@
 	Picker: {{ error.picker }} <br>
 	Wrong Cart Position: {{ error.wrongCartPosition }} <br>
 	Item: {{ error.picked.itemName }} <br>
+	Location: {{ error.picked.alocation }} <br>
       </div>
       <div *ngIf="error.errorIndex == 7">
 	Route: {{ error.routeNumber }} <br>
@@ -45,10 +52,20 @@
 	Picker: {{ error.picker }} <br>
 	Item: {{ error.itemOverage.itemName }} <br>
 	Overage: {{ error.overage }} <br>
+	Location: {{ error.itemOverage.alocation }} <br>
       </div>
-      <button ion-button color="secondary" (click)="confirm(i)">Confirm Error</button>
-      <button ion-button color="danger" (click)="remove(i)">Remove Error</button>
-      <button ion-button (click)="edit(i)">Edit Error</button>
+      </ion-card-content>
+      <ion-row>
+	<ion-col>
+	  <button ion-button  icon-left clear small color="secondary" (click)="confirm(i)"><ion-icon name="thumbs-up"></ion-icon>Confirm</button>
+	</ion-col>
+	<ion-col>
+	  <button ion-button  icon-left clear small color="danger" (click)="remove(i)"><ion-icon name="trash"></ion-icon>Remove</button>
+	</ion-col>
+	<ion-col>
+	  <button ion-button  icon-left clear small color="dark" (click)="edit(i)"><ion-icon name="hammer"></ion-icon>Edit</button>
+	</ion-col>
+      </ion-row>
     </ion-card>
   </ion-list>
 </ion-content>

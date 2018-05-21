@@ -1,0 +1,23 @@
+.aCard{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+  box-shadow: 1px 2px 1px 1px #C8C8C8;
+  margin: 0px 0px 10px 0px;
+}
+
+.itemName{
+  text-align:center;
+}
+
+.itemWrin{
+  text-align:center;
+
+}
+
+.slider{
+  grid-column: 1/4;
+  text-align:center;
+}
+
+

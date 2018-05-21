@@ -4,6 +4,8 @@ export class Item{
   quantity: number;
   selectedQuantity: number;
   stopNumber: number;
+  storeNumber: string;
+  alocation: string;
   audited: boolean;
   auditedItems: number;
 
@@ -23,6 +25,8 @@ export class Item{
     this.selectedQuantity = aItem.selectedQuantity;
     this.stopNumber = aItem.stopNumber;
     this.audited = aItem.audited;
+    this.alocation = aItem.alocation;
+    this.storeNumber = aItem.storeNumber;
   }
 
   convertJSON(anResult){
@@ -30,5 +34,7 @@ export class Item{
     this.wrin = anResult.wrin;
     this.quantity = +anResult.quantity
     this.stopNumber = +anResult.stopNumber;
+    this.alocation = anResult.alocation;
+    this.storeNumber = anResult.storeNumber;
   }
 }

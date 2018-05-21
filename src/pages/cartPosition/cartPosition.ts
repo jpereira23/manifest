@@ -47,6 +47,18 @@ export class CartPositionPage {
   initializeItems(){
     this.theCartPosition.items = this.backUpItems;
   } 
+
+  swipe(event, i){
+    if(event.direction === 2){
+      this.navCtrl.push(ErrorsPage, {
+      routeIndex: this.routeIndex,
+      cartRequirements: this.cartRequirements,
+      itemIndex: i,
+      correct: this.auditorService.getItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex)[i]
+    });
+      console.log("2 it is");
+    }
+  } 
   
 
   /** 
@@ -106,12 +118,7 @@ export class CartPositionPage {
    *
    */
   logErrors(i: number){
-    this.navCtrl.push(ErrorsPage, {
-      routeIndex: this.routeIndex,
-      cartRequirements: this.cartRequirements,
-      itemIndex: i,
-      correct: this.auditorService.getItems(this.routeIndex, this.cartRequirements.statusIndex, this.cartRequirements.stopIndex, this.cartRequirements.cartIndex)[i]
-    });
+    
   }
 
   /**

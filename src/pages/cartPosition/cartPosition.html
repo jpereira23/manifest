@@ -19,7 +19,29 @@
 
 <ion-content padding>
   <div *ngFor="let item of auditorService.getItems(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex, cartRequirements.cartIndex); let i = index">
-  <ion-card *ngIf="item.audited == false && showCompleted == false">
+  <div class="aCard" *ngIf="item.audited == false && showCompleted == false" (swipe)="swipe($event, i)">
+
+    <div class="checkbox">
+    <ion-checkbox color="dark" checked="item.audited" (click)="itemClicked(i)"></ion-checkbox>
+    </div>
+    <div class="itemName">
+    {{ item.itemName }}
+    </div>
+    <div class="itemWrin">
+      <strong>
+    {{ item.wrin }}
+      </strong>
+    </div>
+    
+    <div *ngIf="item.quantity > 1" class="slider">
+      <ion-label>{{item.selectedQuantity}}</ion-label>
+	    <ion-range min="0" [max]="item.quantity" step="1" [(ngModel)]="item.selectedQuantity" (ionChange)="isAudited(i)">
+	      <ion-label range-left>0</ion-label>
+	      <ion-label range-right>{{item.quantity}}</ion-label>
+	    </ion-range>
+
+    </div>
+    <!--
     <ion-card-header>
 	<ion-grid>
 	  <ion-row>
@@ -49,7 +71,8 @@
 	  </ion-col>
 	</ion-row>
       </ion-grid>
-    </ion-card>
+    -->
+    </div>
   <ion-card *ngIf="showCompleted == true && item.audited == true">
     <ion-card-header>
 	<ion-grid>
