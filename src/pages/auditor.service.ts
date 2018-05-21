@@ -34,6 +34,13 @@ export class AuditorService {
 	    this.auditor.errors = [];
 	  }
 	});
+	this.storage.get('potentialErrors').then((pEr) => {
+	  if(pEr != null){
+	    this.auditor.potentialErrors = pEr;
+	  } else {
+	    this.potentialErrors = [];
+	  }
+	});
 	this.isAuditor.next(true);
       }
     });
@@ -67,6 +74,7 @@ export class AuditorService {
 
   addPotentialError(error: Error){
     this.auditor.potentialErrors.push(error);
+    this.storage.set('potentialErrors', this.auditor.potentialErrors);
   } 
 
   getPotentialErrors(){
@@ -157,7 +165,6 @@ export class AuditorService {
   }
 
   getAuditedRoutes(){
-    console.log("SHOULD BE AFTER");
     return this.auditor.auditedRoutes;
   }
 
