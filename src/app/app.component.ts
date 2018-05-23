@@ -4,13 +4,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuditorService } from '../pages/auditor.service';
 
-import { HomePage } from '../pages/home/home';
+import { RoutesPage } from '../pages/routes/routes';
 @Component({
   templateUrl: 'app.html',
   providers: [AuditorService]
 })
 export class MyApp {
-  rootPage:any = HomePage;
+  rootPage:any = RoutesPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private auditorService: AuditorService) {
     platform.ready().then(() => {

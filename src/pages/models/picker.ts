@@ -16,7 +16,7 @@ export class Picker{
   }
 
   convertJSON(aResult: any){
-    this.name = aResult.name;
+    this.name = aResult.name.toUpperCase();
     for(var i = 0; i < aResult.errors.length; i++)
     {
       var aError = new Error();

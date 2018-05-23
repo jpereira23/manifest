@@ -36,18 +36,7 @@ export class RoutePage {
     this.endOfShift = this.navParams.get('endOfShift'); 
     this.selectedStop = this.theRoute.statuss[0].stops[0];
     var tmpRoute; 
-    /*    
-    storage.get('endOfShift').then((val) => {
-      if(val == null)
-      {
-	storage.set('endOfShift', this.endOfShift);
-      }
-      else
-      {
-	this.endOfShift = val;
-      }
-    });
-    */
+    console.log(this.auditorService.getPickers());
   }
   
   ionViewWillLeave(){

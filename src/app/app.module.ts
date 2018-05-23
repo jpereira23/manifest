@@ -5,13 +5,17 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { SearchDropDown } from '../pages/searchDropDown/searchDropDown';
+import { ServerDown } from '../pages/serverDown/serverDown';
+//import { HomePage } from '../pages/home/home';
+import { SearchPage } from '../pages/searchDropDown/searchPage/searchPage';
 import { RoutesPage } from '../pages/routes/routes';
 import { RoutePage } from '../pages/route/route';
 import { ConfirmErrorPage } from '../pages/confirmError/confirmError';
 import { CartPositionPage } from '../pages/cartPosition/cartPosition';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
+import { ClockInModal } from '../pages/clockIn/clockIn';
 import { ErrorsPage } from '../pages/errors/errors';
 import { CartHandlesPage } from '../pages/error/cartHandles/cartHandles';
 import { DamagedCartHandles } from '../pages/error/damagedCartHandles/damagedCartHandles';
@@ -35,7 +39,11 @@ import { AuditorService } from '../pages/auditor.service';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
+    //HomePage,
+    SearchPage,
+    ServerDown,
+    SearchDropDown,
+    ClockInModal,
     RoutesPage,
     RoutePage,
     CartPositionPage,
@@ -65,9 +73,13 @@ import { AuditorService } from '../pages/auditor.service';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
+    //HomePage, 
+    ServerDown,
+    SearchPage,
+    SearchDropDown,
     RoutesPage,
     RoutePage,
+    ClockInModal,
     CartPositionPage,
     ErrorsPage,
     CartHandlesPage,

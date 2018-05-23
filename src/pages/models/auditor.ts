@@ -10,6 +10,7 @@ export class Auditor{
   errors: Array<Error>;
   potentialErrors: Array<Error>;
   pickers: Array<Picker>;
+  clockIn: Date;
 
   constructor(){
     this.firstName = "";
@@ -19,6 +20,7 @@ export class Auditor{
     this.auditedRoutes = [];
     this.errors = [];
     this.pickers = [];
+    this.clockIn = new Date();
   }
 
   auditedRouteExists(route: Route){

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <div *ngIf="firstName.length == 0">
+	Clock In
+      </div>
+      <div *ngIf="firstName.length > 0">
+	Hello, {{ firstName }} {{ lastName }}
+      </div>  
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="isChangeName == true">
+  <ion-item>
+    <ion-label floating>First Name</ion-label>
+    <ion-input type="text" [(ngModel)]="firstName"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Last Name</ion-label>
+    <ion-input type="text" [(ngModel)]="lastName"></ion-input>
+  </ion-item>
+  </div>
+  <div *ngIf="firstName.length > 0 && isChangeName == false">
+    <button ion-button (click)="changeName()">Change Name</button>
+  </div>
+  <button ion-button (click)="clockIn()">Clock In</button>
+</ion-content>

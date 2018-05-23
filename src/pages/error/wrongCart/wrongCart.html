@@ -21,8 +21,8 @@
       <ion-item>
 	<ion-label>Wrong Cart</ion-label>
 	<ion-select [(ngModel)]="error.wrongCartPosition">
-	  <ion-option *ngFor="let cart of auditorService.getCartPositions(routeIndex, cartRequirements.statusIndex, cartRequirements.stopIndex)" [value]="cart.cartPosition">
-	    {{ cart.cartPosition }}
+	  <ion-option *ngFor="let cart of cartPositions" [value]="cart.cartPosition">
+	    {{ cart }}
 	  </ion-option>
 	</ion-select>
       </ion-item>

@@ -7,8 +7,8 @@ import { Item } from './models/item';
 
 @Injectable()
 export class DataService {
-  //url: string = "http://172.124.232.210:443/api/";
-  url: string = "http://localhost:3000/api/";
+  url: string = "http://172.124.232.210:443/api/";
+  //url: string = "http://localhost:3000/api/";
   headers = new Headers();
   result: any;
   constructor(private _http: Http){
@@ -16,7 +16,7 @@ export class DataService {
   }
 
   getManifests(){
-    return this._http.get(this.url + 'obtainManifest').map(res => { return res.json().data });
+    return this._http.get(this.url + 'obtainManifest').map(res => { return res });
   }
 
   getPickers(){

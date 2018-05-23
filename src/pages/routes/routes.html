@@ -10,14 +10,22 @@
 </ion-header>
 
 <ion-content padding>
+  <div class="centerIt" *ngIf="routeLoading == true"> 
+    <ion-spinner></ion-spinner>
+  </div>
+  <div *ngIf="routeLoading == false">
   <ion-list>
     <button ion-item *ngFor="let route of selectedRoutes" (click)="routeSelected(route)">
       {{ route.routeNumber }}
     </button>
   </ion-list>
+  </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (click)="generate()">Load Routes</button>
+    </ion-buttons>
     <ion-buttons end>
       <button ion-button (click)="errorCenter()">Error Center</button>
     </ion-buttons>

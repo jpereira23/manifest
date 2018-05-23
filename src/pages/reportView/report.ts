@@ -36,7 +36,7 @@ export class ReportView{
 
   startNewShift(){
     this.dataService.sendEndOfShift(this.auditorService.getAuditor()).subscribe();
-    this.navCtrl.pop();
+    this.auditorService.clearSystem();
     this.navCtrl.pop();
   } 
 

@@ -53,6 +53,7 @@
 	</ion-card-header>
 	<ion-grid>
 	<ion-row>
+	  <!--
 	  <ion-item>
 	    <ion-label fixed>Picker</ion-label> 
 	    <ion-select [(ngModel)]="cartPosition.picker">
@@ -61,6 +62,8 @@
 	      </ion-option>
 	    </ion-select>
 	  </ion-item>
+	  -->
+	  <search-drop-down [picker]="auditorService.getPickers()"></search-drop-down>
 	</ion-row>
       </ion-grid>
     </ion-card>

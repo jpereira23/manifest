@@ -12,19 +12,37 @@ import { Error } from './models/error';
 @Injectable()
 export class AuditorService {
   auditor: Auditor = new Auditor();
+  pickers: Array<Picker> = [];
   isLoaded = new Subject<boolean>();
   isAuditor = new Subject<boolean>();
   isRoutes = new Subject<boolean>();
+  isClockedIn = new Subject<boolean>();
+  clockedIn: boolean = false;
   
   constructor(private storage: Storage, private localNotifications: LocalNotifications){
+     
     this.storage.get('firstName').then((val) => {
       if(val == null){
 	this.isAuditor.next(false);
       }else{
 	this.auditor = new Auditor();
 	this.auditor.firstName = val;
+	this.storage.get('clockIn').then((vals) => {
+	  this.auditor.clockIn = vals;
+	});
 	this.storage.get('lastName').then((vals) => {
 	  this.auditor.lastName = vals;
+	  this.storage.get('isClockedIn').then((val) =>{
+	    if(val == true){
+	      console.log("true");
+	      this.clockedIn = true;
+	      this.isClockedIn.next(true);
+	    }else{
+	      console.log("true or null"); 
+	      this.clockedIn = false;
+	      this.isClockedIn.next(false);
+	    }
+	  });
 	});
 	this.storage.get('errors').then((er) => {
 	  if(er != null){
@@ -46,10 +64,33 @@ export class AuditorService {
     });
   }
 
+  getFirstName(){
+    return this.auditor.firstName;
+  }
+
+  getLastName(){
+    return this.auditor.lastName;
+  }
+
+  isClocked(){
+    
+  }
+
   addError(error: Error){
     this.auditor.errors.push(error);
     this.storage.set('errors', this.auditor.errors);
   }
+
+  clearSystem(){
+    this.storage.clear().then(() => {
+      this.auditor.routes = [];
+      this.auditor.auditedRoutes = [];
+      this.auditor.potentialErrors = [];
+      this.auditor.errors = [];
+      this.setAuditor(this.auditor);
+      this.isClockedIn.next(false);
+    });
+  } 
 
   checkPotentialErrors(){
     console.log("CHECKING POTENTIAL ERRORS");
@@ -88,6 +129,16 @@ export class AuditorService {
     this.storage.ready().then(() => {
       this.storage.set('lastName', auditor.lastName);
     });
+  
+    this.storage.ready().then(() => {
+      this.storage.set('isClockedIn', true);
+    });
+
+    this.storage.ready().then(() => {
+      this.storage.set('clockIn', auditor.clockIn);
+    });
+    this.isClockedIn.next(true);
+    this.auditor = auditor;
   }
 
   getPicker(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
@@ -107,7 +158,9 @@ export class AuditorService {
   }
 
   getPickers(){
-    return this.auditor.pickers; 
+    console.log(this.auditor.pickers);
+    //return this.auditor.pickers; 
+    return this.pickers;
   }
 
   initializeRoutes(routes: Array<Route>){
@@ -140,12 +193,16 @@ export class AuditorService {
   }
 
   setPickers(pickers: Array<Picker>){
-    this.auditor.pickers = [];
-    this.auditor.pickers = pickers;
+    //this.auditor.pickers = [];
+    //this.auditor.pickers = pickers;
+    this.pickers = [];
+    this.pickers = pickers;
+    console.log(this.auditor.pickers);
   }
 
   addPicker(picker: Picker){
-    this.auditor.pickers.push(picker);
+  //this.auditor.pickers.push(picker);
+    this.pickers.push(picker);
     this.storage.set('pickers', this.auditor.pickers);
   }
 
