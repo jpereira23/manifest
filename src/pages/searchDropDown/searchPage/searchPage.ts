@@ -56,7 +56,7 @@ export class SearchPage{
     let val = event.target.value;
     if(val && val.trim() != ''){
       this.arrayOfPick = this.arrayOfPick.filter((item) => {
-	return(item.picker.name.indexOf(val) > -1);
+	return(item.picker.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
       });
     }
   }

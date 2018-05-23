@@ -63,7 +63,7 @@
 	    </ion-select>
 	  </ion-item>
 	  -->
-	  <search-drop-down [picker]="auditorService.getPickers()"></search-drop-down>
+	  <search-drop-down (picked)="assignPicker($event, cartPosition)" [selectedPicker]="cartPosition.picker" [picker]="auditorService.getPickers()"></search-drop-down>
 	</ion-row>
       </ion-grid>
     </ion-card>

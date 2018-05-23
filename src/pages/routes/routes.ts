@@ -63,15 +63,15 @@ export class RoutesPage {
 
   generate(){
     this.routeLoading = true;
-  this.dataService.getManifests()
-    .subscribe(res => {
-    this.delegateForManifests(res)
-      }, error => {
-	let modal = this.modalCtrl.create(ServerDown);
-	modal.present();
+    this.dataService.getManifests()
+      .subscribe(res => {
+	this.delegateForManifests(res)
+	  }, error => {
+	    let modal = this.modalCtrl.create(ServerDown);
+	    modal.present();
 
-      }, () => {
-	console.log("SOOOOOMETHING");
+	  }, () => {
+	    console.log("SOOOOOMETHING");
       });
   }
 
@@ -97,7 +97,10 @@ export class RoutesPage {
   }
 
   ionViewWillEnter(){
+    console.log("HELLO WORLD");
     this.auditorService.checkPotentialErrors();    
+    this.selectedRoutes = [];
+    this.selectedRoutes = this.auditorService.getRoutes();
   }
 
   ionViewWillLeave(){

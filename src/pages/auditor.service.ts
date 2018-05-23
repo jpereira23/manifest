@@ -20,7 +20,6 @@ export class AuditorService {
   clockedIn: boolean = false;
   
   constructor(private storage: Storage, private localNotifications: LocalNotifications){
-     
     this.storage.get('firstName').then((val) => {
       if(val == null){
 	this.isAuditor.next(false);
@@ -72,10 +71,14 @@ export class AuditorService {
     return this.auditor.lastName;
   }
 
-  isClocked(){
-    
-  }
 
+  reSetItems(routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    this.auditor.routes[routeIndex].reSetItems(statusIndex, stopIndex, cartIndex);
+  } 
+
+  filterItems(aVal: string, routeIndex: number, statusIndex: number, stopIndex: number, cartIndex: number){
+    this.auditor.routes[routeIndex].filterItems(aVal, statusIndex, stopIndex, cartIndex);
+  }
   addError(error: Error){
     this.auditor.errors.push(error);
     this.storage.set('errors', this.auditor.errors);

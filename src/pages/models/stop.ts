@@ -21,7 +21,15 @@ export class Stop{
       this.cartPositions.push(aCartPosition);
     }
   }
+
+  reSetItems(cartIndex){
+    this.cartPositions[cartIndex].reSetItems();
+  }
   
+  filterItems(aVal: string, cartIndex: number){
+    this.cartPositions[cartIndex].filterItems(aVal); 
+  }
+
   getCart(cartPosition: string){
     for(var i = 0; i < this.cartPositions.length; i++)
     {

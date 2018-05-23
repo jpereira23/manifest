@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter} from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { SearchPage } from './searchPage/searchPage';
 import { Picker } from '../models/picker';
@@ -12,14 +12,16 @@ import { AuditorService } from '../auditor.service';
 
 export class SearchDropDown{
   @Input() picker: Array<Picker> = [];
-  selectedPicker: Picker = new Picker();
+  @Output() picked: EventEmitter<Picker> = new EventEmitter<Picker>();
+  @Input() selectedPicker: Picker = new Picker();
+
   constructor(private navCtrl: NavController, private auditorService: AuditorService){
-    this.pickers = this.auditorService.getPickers();
+  //this.picker = this.auditorService.getPickers();
   }
 
   search(){
     this.navCtrl.push(SearchPage, {
-      pickers: this.pickers,
+      pickers: this.picker,
       callback: this.getData
     });
   }  
@@ -27,6 +29,7 @@ export class SearchDropDown{
   getData = (data) => {
     return new Promise((resolve, reject) => {
       this.selectedPicker = data;
+      this.picked.emit(data);
       resolve();
     });
   };

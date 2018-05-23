@@ -36,6 +36,14 @@ export class Status{
     }
   }
 
+  reSetItems(stopIndex, cartIndex){
+    this.stops[stopIndex].reSetItems(cartIndex);
+  }
+
+  filterItems(aVal: string, stopIndex: number, cartIndex: number){
+    this.stops[stopIndex].filterItems(aVal, cartIndex);
+  }
+
   getCartPositions(stopIndex: number){
     return this.stops[stopIndex].cartPositions;
   }

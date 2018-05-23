@@ -40,6 +40,14 @@ export class Route{
     return false;
   }
 
+  reSetItems(statusIndex, stopIndex, cartIndex){
+    this.statuss[statusIndex].reSetItems(stopIndex, cartIndex);
+  }
+
+  filterItems(aVal: string, statusIndex: number, stopIndex: number, cartIndex: number){
+    this.statuss[statusIndex].filterItems(aVal, stopIndex, cartIndex);
+  }
+
   getCartPositions(statusIndex: number, stopIndex: number){
     return this.statuss[statusIndex].getCartPositions(stopIndex);
   } 

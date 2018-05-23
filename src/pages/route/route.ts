@@ -39,8 +39,12 @@ export class RoutePage {
     console.log(this.auditorService.getPickers());
   }
   
-  ionViewWillLeave(){
+  ionViewWillEnter(){
     //this.storage.set('pickers', this.pickers);
+  }
+
+  assignPicker(event, cartPosition){
+    cartPosition.picker = event;
   }
 
   addPicker(){
